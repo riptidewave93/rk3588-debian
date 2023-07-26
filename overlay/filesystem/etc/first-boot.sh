@@ -59,11 +59,10 @@ if [ -f /boot/initramfs.cpio.gz ]; then
 fi
 
 # If we are here, we can safely move off of boot.scr to extlinux once our dtb is set
-# Disabled until we get ubootenv saving to the SD, or working within the eMMC/SD partition space
-#export UBOOT_DTB_NAME=$(fw_printenv -n fdtfile)
-#sed -i "s|UBOOTDTBNAMEGOESHERE|${UBOOT_DTB_NAME}|g" /etc/default/u-boot.custom
-#mv /etc/default/u-boot.custom /etc/default/u-boot
-#u-boot-update
+export UBOOT_DTB_NAME=$(cat /proc/cmdline | sed -e 's/^.*boot.dtb=//' -e 's/ .*$//')
+sed -i "s|UBOOTDTBNAMEGOESHERE|${UBOOT_DTB_NAME}|g" /etc/default/u-boot.custom
+mv /etc/default/u-boot.custom /etc/default/u-boot
+u-boot-update
 
 # And were done!
 echo "First-Boot.sh setup script complete! Enjoy!" > /dev/console

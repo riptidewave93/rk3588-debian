@@ -40,15 +40,16 @@ Other helpful commands:
   - eMMC Example: `rkdeveloptool write 0 ./debian-rk3588*.img`
 
 ## To Do
-* Fixup/finish quartzpro64 kernel device tree.
-  * MMC Works
-  * Booting Works
-  * USB 2.0 Works
-  * SDCard Works
-  * PCI-E DOES NOT WORK
-  * Networking DOES NOT WORK
-  * USB3 DOES NOT WORK
-* Make u-boot more functional for the quartzpro64
+* quartzpro64
+  * Fixup/finish kernel device tree.
+    * MMC Works
+    * Booting Works
+    * USB 2.0 Works
+    * SDCard Works
+    * Networking Works
+    * PCI-E DOES NOT WORK
+    * USB3 DOES NOT WORK
+  * Make u-boot more functional
 * You tell me. Bug reports and PRs welcome!
 
 ## Notes

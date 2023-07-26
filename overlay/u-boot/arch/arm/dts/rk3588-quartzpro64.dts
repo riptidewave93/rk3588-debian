@@ -60,36 +60,32 @@
 };
 
 &gmac0 {
-	label = "RJ45";
-	phy-mode = "rgmii-rxid";
 	clock_in_out = "output";
-
-	pinctrl-names = "default";
+	phy-handle = <&rgmii_phy>;
+	phy-mode = "rgmii-rxid";
 	pinctrl-0 = <&gmac0_miim
 		     &gmac0_tx_bus2
 		     &gmac0_rx_bus2
 		     &gmac0_rgmii_clk
 		     &gmac0_rgmii_bus>;
-
-	tx_delay = <0x43>;
+	pinctrl-names = "default";
 	rx_delay = <0x00>;
-
-	phy-handle = <&phy1>;
+	tx_delay = <0x43>;
 	status = "okay";
 };
 
 &mdio0 {
-	phy1: ethernet-phy@1 {
-		compatible = "ethernet-phy-ieee802.3-c22";
-		reg = <1>;
-		max-speed = <1000>;
-		/* Reset time is 20ms, 100ms for rtl8211f */
-		reset-gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
+	rgmii_phy: ethernet-phy@1 {
+		/* RTL8211F */
+		compatible = "ethernet-phy-id001c.c916";
+		reg = <0x1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&rtl8211f_rst>;
 		reset-assert-us = <20000>;
 		reset-deassert-us = <100000>;
+		reset-gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
 	};
 };
-
 
 &pinctrl {
 	rtl8211f {
@@ -115,16 +111,20 @@
 	no-sdio;
 	no-sd;
 	non-removable;
-	max-frequency = <200000000>;
-	mmc-hs400-1_8v;
-	mmc-hs400-enhanced-strobe;
+	max-frequency = <150000000>;
+	mmc-hs200-1_8v;
+	// mmc-hs400-1_8v;
+	// mmc-hs400-enhanced-strobe;
 	status = "okay";
 };
 
 &sdmmc {
+	max-frequency = <150000000>;
+	no-sdio;
+	no-mmc;
 	bus-width = <4>;
-	cap-mmc-highspeed;
 	cap-sd-highspeed;
+	sd-uhs-sdr104;
 	disable-wp;
 	status = "okay";
 };

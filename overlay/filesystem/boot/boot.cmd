@@ -2,17 +2,16 @@
 # mkimage -C none -A arm -T script -d boot.cmd boot.scr
 
 # Set local vars
-setenv config_load_addr "0x44000000"
-setenv kernel_comp_addr_r "0x05000000"
+setenv kernel_comp_addr_r "0x05000000" # Needed to boot correctly
 setenv ramdisk "initrd.img-KERNELVER"
 setenv kernel "vmlinuz-KERNELVER"
 setenv bootpart_uuid "PLACEHOLDERUUID"
-setenv extra_cmdline "net.ifnames=0 fsck.repair=yes panic=3"
+setenv extra_cmdline "net.ifnames=0 fsck.repair=yes panic=3 boot.dtb=${fdtfile}"
 
 # Import and load any custom settings
 if test -e ${devtype} ${devnum}:${distro_bootpart} config.txt; then
-	load ${devtype} ${devnum}:${distro_bootpart} ${config_load_addr} config.txt
-	env import -t ${config_load_addr} ${filesize}
+	load ${devtype} ${devnum}:${distro_bootpart} ${pxefile_addr_r} config.txt
+	env import -t ${pxefile_addr_r} ${filesize}
 fi
 
 # If this is first boot, save our env

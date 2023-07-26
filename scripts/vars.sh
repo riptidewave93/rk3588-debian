@@ -37,7 +37,7 @@ kernel_overlay_dir="kernel"
 
 # Distro
 distrib_name="debian"
-deb_mirror="https://mirrors.kernel.org/debian/"
+deb_mirror="http://ftp.us.debian.org/debian"
 deb_release="bookworm"
 deb_arch="arm64"
 fs_overlay_dir="filesystem"
