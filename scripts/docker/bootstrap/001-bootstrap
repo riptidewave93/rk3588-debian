@@ -4,9 +4,6 @@ echo "Starting 001-bootstrap within chroot!"
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Fix slow bootstrap
-ulimit -n 1024
-
 # Conf debconf
 debconf-set-selections /debconf.set
 rm -f /debconf.set
@@ -22,7 +19,7 @@ export KERN_VERSION=$(find /lib/modules/ -maxdepth 1 | sort | tail -1 | xargs ba
 
 # Now that we have our wanted kernel in place, do the rest of our installs
 apt-get -o Dpkg::Options::="--force-confold" -y --allow-downgrades \
-    --allow-remove-essential --allow-change-held-packages install \
+    --allow-remove-essential --allow-change-held-packages install cloud-init \
     bsdextrautils git binutils ca-certificates e2fsprogs haveged parted curl \
     locales console-common openssh-server less vim net-tools wireguard-tools \
     ntpsec u-boot-tools wget u-boot-menu initramfs-tools network-manager
@@ -30,27 +27,26 @@ apt-get -o Dpkg::Options::="--force-confold" -y --allow-downgrades \
 # Locale gen
 locale-gen
 
-# Setup root PW
-echo "root:debian" | chpasswd
-
-# Allow root SSH login with PW
-sed -i 's|#PermitRootLogin prohibit-password|PermitRootLogin yes|g' /etc/ssh/sshd_config
-
 # Install packages for wifi
 apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regdb firmware-realtek bluez bluez-tools
 
-# Setup boot partition
-mkdir -p /boot/rockchip
-mv /root/kernel/*.dtb /boot/rockchip/
-sed -i "s|KERNELVER|${KERN_VERSION}|g" /boot/boot.cmd
-mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr
+# Install our DTBs
+mkdir -p /boot/dtb-${KERN_VERSION}/rockchip
+mv /root/kernel/*.dtb /boot/dtb-${KERN_VERSION}/rockchip/
+
+# Generate initramfs
+update-initramfs -u -k ${KERN_VERSION}
+
+# Update extlinux
+u-boot-update
+
+# Disable this BS, we use nmcli
+systemctl disable systemd-networkd-wait-online.service
 
 # Cleanup stuff we don't want floating around
 apt-get autoclean
 apt-get --purge -y autoremove
-systemctl stop ssh.service
-systemctl enable first-boot.service
-rm -f /etc/ssh/ssh_host_*
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-rm -rf /boot.bak /boot/extlinux # Bad initial generation, fall back to boot.scr
-rm -rf /root/kernel
+rm -rf /boot.bak
+rm -rf /var/lib/dbus/machine-id /etc/machine-id # Nuke machine IDs
+rm -rf /root/kernel # kernel working dir

@@ -33,6 +33,8 @@ Other helpful commands:
 - Have a build fail and have stale mounts? `make mountclean`
 - Want to delete the download cache and do a 100% fresh build? `make distclean`
 
+Default login is username and password of debian.
+
 ## Flashing
 - Take your completed image from `./output` and extract it with gunzip
 - Flash directly to an SD card, or to eMMC.

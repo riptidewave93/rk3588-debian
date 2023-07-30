@@ -28,9 +28,9 @@ if [[ -d ${root_path}/overlay/${fs_overlay_dir}/ ]]; then
 	cp -R ${root_path}/overlay/${fs_overlay_dir}/* ./
 fi
 
-# Apply our disk signature to boot.cmd
+# Apply our disk signature to fstab
 UBOOTUUID=$(cat ${build_path}/disk-signature.txt | awk '{print tolower($0)}')
-sed -i "s|PLACEHOLDERUUID|${UBOOTUUID:2}|g" ./boot/boot.cmd
+sed -i "s|PLACEHOLDERUUID|${UBOOTUUID:2}|g" ${build_path}/rootfs/etc/fstab
 
 # Hostname
 echo "${distrib_name}" > ${build_path}/rootfs/etc/hostname
