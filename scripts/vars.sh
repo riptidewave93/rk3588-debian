@@ -25,8 +25,8 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/d6ccfe401ca84a98ca3b85c12b9
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/u-boot/-/archive/rk3588-rock5b/u-boot-rk3588-rock5b.zip"
-uboot_filename="u-boot-rk3588-rock5b.zip"
+uboot_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/u-boot/-/archive/2023.10-rc1-rk3588/u-boot-2023.10-rc1-rk3588.zip"
+uboot_filename="u-boot-2023.10-rc1-rk3588.zip"
 uboot_overlay_dir="u-boot"
 
 # Kernel

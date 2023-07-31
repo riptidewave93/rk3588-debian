@@ -21,7 +21,6 @@ TIMESTAMP=`date +%Y%m%d-%H%M`
 mkdir -p ${root_path}/output/${TIMESTAMP}/kernel
 mv ${build_path}/final/debian*.img.gz ${root_path}/output/${TIMESTAMP}/
 cp ${build_path}/kernel/linux-*.deb ${root_path}/output/${TIMESTAMP}/kernel/
-cp ${build_path}/kernel/*.dtb ${root_path}/output/${TIMESTAMP}/kernel/
 rm -rf ${build_path}/final
 
 debug_msg "Finished 04_post_docker.sh"

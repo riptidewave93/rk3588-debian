@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "Starting 001-bootstrap within chroot!"
 
@@ -11,8 +12,8 @@ rm -f /debconf.set
 # Initial package install
 apt-get clean
 apt-get update
-dpkg -i /root/kernel/linux-*.deb # Install our kernel first
 apt-mark hold linux-image-* # We do not want these, as we run our own kernel!
+dpkg -i /root/kernel/linux-*.deb # Install our own stuff
 
 # Export kernel info
 export KERN_VERSION=$(find /lib/modules/ -maxdepth 1 | sort | tail -1 | xargs basename )
@@ -30,23 +31,21 @@ locale-gen
 # Install packages for wifi
 apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regdb firmware-realtek bluez bluez-tools
 
-# Install our DTBs
-mkdir -p /boot/dtb-${KERN_VERSION}/rockchip
-mv /root/kernel/*.dtb /boot/dtb-${KERN_VERSION}/rockchip/
-
 # Generate initramfs
 update-initramfs -u -k ${KERN_VERSION}
 
 # Update extlinux
 u-boot-update
 
-# Disable this BS, we use nmcli
-systemctl disable systemd-networkd-wait-online.service
+# Disable systemd-networkd, we use nmcli AKA NetworkManager
+systemctl disable systemd-networkd
+systemctl disable systemd-networkd-wait-online
+systemctl mask systemd-networkd
+systemctl mask systemd-networkd-wait-online
 
 # Cleanup stuff we don't want floating around
 apt-get autoclean
 apt-get --purge -y autoremove
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-rm -rf /boot.bak
 rm -rf /var/lib/dbus/machine-id /etc/machine-id # Nuke machine IDs
 rm -rf /root/kernel # kernel working dir

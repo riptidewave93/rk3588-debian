@@ -41,8 +41,23 @@ mkdir -p ${build_path}/kernel
 make savedefconfig
 mv defconfig ${build_path}/kernel/kernel_config
 
-# Prep for storage of important bits
+# Get our kernel version (fully)
+KERNEL_VERSION=$(ls ${kernel_builddir}/linux-headers-*.deb | awk -F- '{ print $3"-"$6"-"$7 }')
+
+# Now build our deb for the dtb's
+mkdir -p ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}/boot/dtb-${KERNEL_VERSION}/rockchip
+mv ./scripts/dtb-deb/DEBIAN ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}/
+sed -i "s|KERNELVERSION|${KERNEL_VERSION}|g" ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}/DEBIAN/control
+sed -i "s|KERNELVERSION|${KERNEL_VERSION}|g" ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}/DEBIAN/conffiles
 for i in "${supported_devices[@]}"; do
-	cp arch/arm64/boot/dts/rockchip/${i}.dtb ${build_path}/kernel
+	cp arch/arm64/boot/dts/rockchip/${i}.dtb ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}/boot/dtb-${KERNEL_VERSION}/rockchip
 done
-cp ${kernel_builddir}/linux-*.deb ${build_path}/kernel
+cd ${build_path}/kernel
+dpkg-deb --root-owner-group --build linux-dtbs-${KERNEL_VERSION}
+rm -rf ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}
+
+# Remove the debug kernel
+rm ${kernel_builddir}/linux-image-${KERNEL_VERSION}-dbg*.deb
+
+# Move our debs to the kernel dir
+mv ${kernel_builddir}/linux-*.deb ${build_path}/kernel
