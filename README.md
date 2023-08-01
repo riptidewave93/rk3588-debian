@@ -43,15 +43,11 @@ Default login is username and password of debian.
 
 ## To Do
 * quartzpro64
-  * Fixup/finish kernel device tree.
-    * MMC Works
-    * Booting Works
-    * USB 2.0 Works
-    * SDCard Works
-    * Networking Works
-    * PCI-E DOES NOT WORK
-    * USB3 DOES NOT WORK
-  * Make u-boot more functional
+  * Fixup/finish kernel device tree
+    * USB3 does not work
+    * Audio does not work
+    * Wifi/Bluetooth do not work
+    * Probably more...
 * You tell me. Bug reports and PRs welcome!
 
 ## Notes
