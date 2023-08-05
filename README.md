@@ -6,7 +6,7 @@ Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at 
 
 - Linux Kernel - [Collabora's rk3588 mainline staging branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/rk3588?ref_type=heads)
 - Arm Trusted Firmware - [rk3588 platform support PR](https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/commit/?id=d247b8bb2f1dfb30533389cc5516e0d149c50824)
-- Mainline U-Boot - [Collabora's 2023.10-rc1-rk3588 staging branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/u-boot/-/tree/2023.10-rc1-rk3588?ref_type=heads)
+- Mainline U-Boot - [Collabora's rk3588 mainline staging branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/u-boot/-/tree/rk3588?ref_type=heads)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 
@@ -45,8 +45,10 @@ Default login is username and password of debian.
 * quartzpro64
   * Fixup/finish kernel device tree
     * USB3 does not work
+      * Requires hynetek,husb311 driver port most likely
     * Audio does not work
     * Wifi/Bluetooth do not work
+      * No driver for ap6255
     * Probably more...
 * You tell me. Bug reports and PRs welcome!
 
