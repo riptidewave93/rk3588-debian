@@ -74,7 +74,7 @@
 			color = <LED_COLOR_ID_AMBER>;
 			function = LED_FUNCTION_SD;
 			gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "disk-activity";
+			linux,default-trigger = "mmc0";
 		};
 	};
 

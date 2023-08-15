@@ -43,7 +43,7 @@
 			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_SD;
 			gpios = <&gpio3 RK_PD5 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "disk-activity";
+			linux,default-trigger = "mmc0";
 		};
 	};
 
@@ -110,6 +110,24 @@
 		regulator-min-microvolt = <1100000>;
 		regulator-max-microvolt = <1100000>;
 		vin-supply = <&vcc5v0_sys>;
+	};
+};
+
+&cluster1_opp_table {
+	opp-2400000000 {
+		opp-hz = /bits/ 64 <2400000000>;
+		opp-microvolt = <1000000 1000000 1000000>,
+				<1000000 1000000 1000000>;
+		clock-latency-ns = <40000>;
+	};
+};
+
+&cluster2_opp_table {
+	opp-2400000000 {
+		opp-hz = /bits/ 64 <2400000000>;
+		opp-microvolt = <1000000 1000000 1000000>,
+				<1000000 1000000 1000000>;
+		clock-latency-ns = <40000>;
 	};
 };
 

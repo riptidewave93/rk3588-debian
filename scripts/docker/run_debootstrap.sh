@@ -34,7 +34,7 @@ sed -i "s|PLACEHOLDERUUID|${UBOOTUUID:2}|g" ${build_path}/rootfs/etc/fstab
 
 # Hostname
 echo "${distrib_name}" > ${build_path}/rootfs/etc/hostname
-echo "127.0.1.1	${distrib_name}" >> ${build_path}/rootfs/etc/host
+echo "127.0.1.1	${distrib_name}" >> ${build_path}/rootfs/etc/hosts
 
 # Console settings
 echo "console-common	console-data/keymap/policy	select	Select keymap from full list

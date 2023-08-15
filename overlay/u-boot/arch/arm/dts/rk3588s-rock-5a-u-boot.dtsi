@@ -1,0 +1,111 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Collabora Ltd.
+ */
+
+#include "rk3588s-u-boot.dtsi"
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/usb/pd.h>
+
+/ {
+	aliases {
+		mmc1 = &sdmmc;
+	};
+
+	chosen {
+		u-boot,spl-boot-order = "same-as-spl", &sdmmc, &sdhci;
+	};
+};
+
+&emmc_bus8 {
+	bootph-all;
+};
+
+&emmc_clk {
+	bootph-all;
+};
+
+&emmc_cmd {
+	bootph-all;
+};
+
+&emmc_data_strobe {
+	bootph-all;
+};
+
+&emmc_rstnout {
+	bootph-all;
+};
+
+&combphy0_ps {
+	status = "okay";
+};
+
+&pcie2x1l2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie2x1l2_pins &pcie_reset_h>;
+	reset-gpios = <&gpio3 RK_PD1 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&pinctrl {
+	bootph-all;
+
+	pcie {
+		pcie_reset_h: pcie-reset-h {
+			rockchip,pins = <3 RK_PD1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		pcie2x1l2_pins: pcie2x1l2-pins {
+			rockchip,pins = <3 RK_PC7 4 &pcfg_pull_none>,
+					<3 RK_PD0 4 &pcfg_pull_none>;
+		};
+	};
+};
+
+&pcfg_pull_none {
+	bootph-all;
+};
+
+&pcfg_pull_up_drv_level_2 {
+	bootph-all;
+};
+
+&pcfg_pull_up {
+	bootph-all;
+};
+
+&sdmmc {
+	bus-width = <4>;
+	status = "okay";
+};
+
+&sdmmc_bus4 {
+	bootph-all;
+};
+
+&sdmmc_clk {
+	bootph-all;
+};
+
+&sdmmc_cmd {
+	bootph-all;
+};
+
+&sdmmc_det {
+	bootph-all;
+};
+
+&sdhci {
+	cap-mmc-highspeed;
+	mmc-ddr-1_8v;
+	mmc-hs200-1_8v;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_bus8 &emmc_clk &emmc_cmd &emmc_data_strobe &emmc_rstnout>;
+};
+
+&uart2m0_xfer {
+	bootph-all;
+};

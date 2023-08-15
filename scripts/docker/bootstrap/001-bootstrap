@@ -13,7 +13,7 @@ rm -f /debconf.set
 apt-get clean
 apt-get update
 apt-mark hold linux-image-* # We do not want these, as we run our own kernel!
-dpkg -i /root/kernel/linux-*.deb # Install our own stuff
+dpkg -i /root/kernel/linux-*.deb # Install post hold
 
 # Export kernel info
 export KERN_VERSION=$(find /lib/modules/ -maxdepth 1 | sort | tail -1 | xargs basename )
