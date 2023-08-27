@@ -48,7 +48,7 @@ Default login is username and password of debian.
       * Requires hynetek,husb311 driver port most likely
     * Audio does not work
     * Wifi/Bluetooth do not work
-      * No driver for ap6255
+      * No driver for ap6255? google says it should work...
     * Probably more...
 * You tell me. Bug reports and PRs welcome!
 

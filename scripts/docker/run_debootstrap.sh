@@ -44,6 +44,9 @@ console-common	console-data/keymap/full	select	us
 # Copy over kernel goodies
 cp -r ${build_path}/kernel ${build_path}/rootfs/root/
 
+# Remove the debug kernel
+rm ${build_path}/rootfs/root/kernel/linux-image-*-dbg_*.deb
+
 # Kick off bash setup script within chroot
 cp ${docker_scripts_path}/bootstrap/001-bootstrap ${build_path}/rootfs/bootstrap
 chroot ${build_path}/rootfs /bootstrap

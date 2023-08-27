@@ -56,8 +56,5 @@ cd ${build_path}/kernel
 dpkg-deb --root-owner-group --build linux-dtbs-${KERNEL_VERSION}
 rm -rf ${build_path}/kernel/linux-dtbs-${KERNEL_VERSION}
 
-# Remove the debug kernel
-rm ${kernel_builddir}/linux-image-${KERNEL_VERSION}-dbg*.deb
-
 # Move our debs to the kernel dir
 mv ${kernel_builddir}/linux-*.deb ${build_path}/kernel

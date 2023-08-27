@@ -46,6 +46,6 @@ systemctl mask systemd-networkd-wait-online
 # Cleanup stuff we don't want floating around
 apt-get autoclean
 apt-get --purge -y autoremove
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /etc/resolv.conf
 rm -rf /var/lib/dbus/machine-id /etc/machine-id # Nuke machine IDs
 rm -rf /root/kernel # kernel working dir
