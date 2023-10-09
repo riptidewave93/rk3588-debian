@@ -16,8 +16,8 @@ toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
 
 # Arm Trusted Firmware
-atf_src="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/snapshot/trusted-firmware-a-d247b8bb2f1dfb30533389cc5516e0d149c50824.tar.gz"
-atf_filename="trusted-firmware-a-d247b8bb2f1dfb30533389cc5516e0d149c50824.tar.gz"
+atf_src="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/snapshot/trusted-firmware-a-5f03fcb921e7270e9038cd8dfb567f0fc9c3e500.tar.gz"
+atf_filename="trusted-firmware-a-5f03fcb921e7270e9038cd8dfb567f0fc9c3e500.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
