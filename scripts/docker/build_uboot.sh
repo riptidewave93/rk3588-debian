@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-docker_scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 . ${scripts_path}/vars.sh
 
@@ -16,7 +15,7 @@ export CROSS_COMPILE=${toolchain_cross_compile}
 export ARCH=arm64
 export BL31=${build_path}/atf/bl31.bin
 
-# Stupid TPL
+# Stupid TPL has to be prebuilt
 export ROCKCHIP_TPL=${root_path}/downloads/${tpl_filename}
 
 # Here we go

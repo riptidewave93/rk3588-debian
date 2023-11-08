@@ -16,12 +16,12 @@ toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
 
 # Arm Trusted Firmware
-atf_src="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/snapshot/trusted-firmware-a-5f03fcb921e7270e9038cd8dfb567f0fc9c3e500.tar.gz"
-atf_filename="trusted-firmware-a-5f03fcb921e7270e9038cd8dfb567f0fc9c3e500.tar.gz"
+atf_src="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/snapshot/trusted-firmware-a-ef131ac2398ea21032a570f32b4cf4baafd3b29e.tar.gz"
+atf_filename="trusted-firmware-a-ef131ac2398ea21032a570f32b4cf4baafd3b29e.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
-tpl_src="https://github.com/rockchip-linux/rkbin/raw/d6ccfe401ca84a98ca3b85c12b9554a1a43a166c/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.11.bin"
+tpl_src="https://github.com/rockchip-linux/rkbin/raw/2952b2bd9fc99858fdd004893c98019b58693f05/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
@@ -34,6 +34,11 @@ kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux
 kernel_filename="linux-rk3588.tar.gz"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
+
+# Genimage
+genimage_src="https://github.com/pengutronix/genimage/releases/download/v16/genimage-16.tar.xz"
+genimage_filename="$(basename $genimage_src)"
+genimage_repopath="${genimage_filename%.tar.xz}"
 
 # Distro
 distrib_name="debian"
