@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0+
 /*
- * Copyright (c) 2023 Collabora Ltd.
+ * Copyright 2023 Google, Inc
  */
 
 #include <fdtdec.h>
 #include <fdt_support.h>
 
 #ifdef CONFIG_OF_BOARD_SETUP
-int rock5b_add_reserved_memory_fdt_nodes(void *new_blob)
+int quartzpro64_add_reserved_memory_fdt_nodes(void *new_blob)
 {
 	struct fdt_memory gap1 = {
 		.start = 0x3fc000000,
@@ -34,6 +34,6 @@ int rock5b_add_reserved_memory_fdt_nodes(void *new_blob)
 
 int ft_board_setup(void *blob, struct bd_info *bd)
 {
-	return rock5b_add_reserved_memory_fdt_nodes(blob);
+	return quartzpro64_add_reserved_memory_fdt_nodes(blob);
 }
 #endif

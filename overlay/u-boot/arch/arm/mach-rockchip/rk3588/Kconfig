@@ -22,8 +22,9 @@ config TARGET_RK3588_NEU6
 config TARGET_QUARTZPRO64_RK3588
 	bool "Pine64 QuartzPro64 RK3588 board"
 	select BOARD_LATE_INIT
-    help
-      QuartzPro64 Dev Board
+	help
+	  Pine64 QuartzPro64 is a Rockchip RK3588 based SBC (Single Board
+	  Computer) by Pine64.
 
 config TARGET_ROCK5A_RK3588
 	bool "Radxa ROCK5A RK3588 board"
