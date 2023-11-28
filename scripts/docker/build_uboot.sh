@@ -42,6 +42,6 @@ for board in "${supported_devices[@]}"; do
     cfg+="_defconfig"
     make distclean
     make ${cfg}
-    make -j`getconf _NPROCESSORS_ONLN`
+    make -j`getconf _NPROCESSORS_ONLN` || cat ./arch/arm/dts/.rk3588-quartzpro64.dtb.pre.tmp
     mv u-boot-rockchip.bin ${build_path}/uboot/${board}.uboot
 done
