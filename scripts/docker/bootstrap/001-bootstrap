@@ -31,6 +31,10 @@ locale-gen
 # Install packages for wifi
 apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regdb firmware-realtek bluez bluez-tools
 
+# Add our GPU firmware
+mkdir -p /lib/firmware/arm/mali/arch10.8
+wget -O /lib/firmware/arm/mali/arch10.8/mali_csffw.bin "https://gitlab.com/firefly-linux/external/libmali/-/raw/rk3588/firefly/firmware/g610/mali_csffw.bin"
+
 # Generate initramfs
 update-initramfs -u -k ${KERN_VERSION}
 

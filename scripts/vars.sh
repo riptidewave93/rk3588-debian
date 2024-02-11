@@ -16,20 +16,20 @@ toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
 
 # Arm Trusted Firmware
-atf_src="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/snapshot/trusted-firmware-a-7ae3d1ac9c44ac352567ebd94389964695200e00.tar.gz"
-atf_filename="trusted-firmware-a-7ae3d1ac9c44ac352567ebd94389964695200e00.tar.gz"
+atf_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/trusted-firmware-a/-/archive/rk3588/trusted-firmware-a-rk3588.tar.gz"
+atf_filename="trusted-firmware-a-rk3588.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
-tpl_src="https://github.com/rockchip-linux/rkbin/raw/2952b2bd9fc99858fdd004893c98019b58693f05/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
+tpl_src="https://github.com/rockchip-linux/rkbin/raw/b4558da0860ca48bf1a571dd33ccba580b9abe23/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.01-rc3.zip"
-uboot_filename="u-boot-2024.01-rc3.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.04-rc1.zip"
+uboot_filename="u-boot-2024.04-rc1.zip"
 uboot_overlay_dir="u-boot"
 
-# Kernel
+# Mainline Kernel
 kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/rk3588/linux-rk3588.tar.gz"
 kernel_filename="linux-rk3588.tar.gz"
 kernel_config="rk3588_defconfig"
