@@ -19,9 +19,16 @@ if [ ! -f ${root_path}/downloads/${toolchain_filename} ]; then
 fi
 
 # ATF
-if [ ! -f ${root_path}/downloads/${atf_filename} ]; then
-    debug_msg "Downloading Arm Trusted Firmware..."
-    wget ${atf_src} -O ${root_path}/downloads/${atf_filename}
+if [ -z "${atf_binary}" ]; then
+    if [ ! -f ${root_path}/downloads/${atf_filename} ]; then
+        debug_msg "Downloading Arm Trusted Firmware..."
+        wget ${atf_src} -O ${root_path}/downloads/${atf_filename}
+    fi
+else
+    if [ ! -f ${root_path}/downloads/bl31.bin ]; then
+        debug_msg "Downloading Prebuilt Arm Trusted Firmware..."
+        wget ${atf_binary} -O ${root_path}/downloads/bl31.bin
+    fi
 fi
 
 # Stupid U-Boot TPL BS for this SoC
