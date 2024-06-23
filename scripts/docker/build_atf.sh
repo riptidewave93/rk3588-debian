@@ -19,8 +19,14 @@ if [ -z "${atf_binary}" ]; then
     export CROSS_COMPILE=${toolchain_cross_compile}
     export ARCH=arm64
 
-    # Build the ATF
-    cd ${atf_builddir}/${atf_filename%.tar.gz}
+    # CD based on which source we build from
+    if [ -d "${atf_builddir}/${atf_filename%.tar.gz}" ]; then
+        cd ${atf_builddir}/${atf_filename%.tar.gz}
+    else
+        cd ${atf_builddir}
+    fi
+
+    # Build our ATF
     make LOG_LEVEL=10 PLAT=${atf_platform} bl31
     mv ./build/${atf_platform}/release/bl31/bl31.elf ${build_path}/atf/bl31.bin
 else
