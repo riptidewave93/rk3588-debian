@@ -28,3 +28,6 @@ mv ${build_path}/final/debian*.img.xz ${root_path}/output/${TIMESTAMP}/
 mv ${build_path}/kernel/linux-*.deb ${root_path}/output/${TIMESTAMP}/kernel/
 mv ${build_path}/uboot/*.uboot ${root_path}/output/${TIMESTAMP}/u-boot/
 rm -rf ${build_path}
+
+# And finally, update permissions of the output dir to match that of the repo dir
+chown -R $(stat -c "%u:%g" ${root_path}) ${root_path}/output

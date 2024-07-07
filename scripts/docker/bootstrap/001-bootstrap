@@ -52,5 +52,5 @@ systemctl mask systemd-networkd-wait-online
 apt-get autoclean
 apt-get --purge -y autoremove
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /etc/resolv.conf
-rm -rf /var/lib/dbus/machine-id /etc/machine-id # Nuke machine IDs
+truncate -s0 /var/lib/dbus/machine-id /etc/machine-id # Nuke machine IDs but keep files so systemd is happy
 rm -rf /root/kernel # kernel working dir
