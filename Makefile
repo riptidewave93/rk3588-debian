@@ -21,6 +21,6 @@ distclean: clean
 	rm -rf $(CURDIR)/downloads $(CURDIR)/output
 
 mountclean:
-	sudo umount $(CURDIR)/BuildEnv/rootfs/boot; \
+	sudo umount $(CURDIR)/BuildEnv/rootfs/boot/efi; \
 	sudo umount $(CURDIR)/BuildEnv/rootfs; \
 	sudo losetup -D

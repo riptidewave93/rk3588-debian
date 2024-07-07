@@ -2,8 +2,6 @@
 FROM debian:12
 
 RUN mkdir /repo
-COPY ./scripts/vars.sh /vars.sh
-COPY ./scripts/docker/setup_mkimage.sh /setup_mkimage.sh
 
 RUN apt-get update && apt-get install -yq \
     autoconf \
@@ -42,7 +40,6 @@ RUN apt-get update && apt-get install -yq \
     swig \
     unzip \
     wget \
+    xz-utils \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && /setup_mkimage.sh \
-    && rm /setup_mkimage.sh
+    && rm -rf /var/lib/apt/lists/*

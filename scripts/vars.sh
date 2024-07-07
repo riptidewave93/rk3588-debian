@@ -10,7 +10,7 @@ docker_tag=rk3588-builder:builder
 supported_devices=(rk3588-quartzpro64 rk3588s-rock-5a)
 
 # Toolchain
-toolchain_url="https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
+toolchain_url="https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
 toolchain_filename="$(basename ${toolchain_url})"
 toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
@@ -28,8 +28,8 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/a2a0b89b6c8c612dca5ed9ed8a6
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.07-rc4.zip"
-uboot_filename="u-boot-2024.07-rc4.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.07.zip"
+uboot_filename="u-boot-2024.07.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
@@ -37,11 +37,6 @@ kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
-
-# Genimage
-genimage_src="https://github.com/pengutronix/genimage/releases/download/v16/genimage-16.tar.xz"
-genimage_filename="$(basename ${genimage_src})"
-genimage_repopath="${genimage_filename%.tar.xz}"
 
 # Distro
 distrib_name="debian"

@@ -13,8 +13,18 @@ export ARCH=arm64
 export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
 
-# Generate random hex string for use with the final disk image, used for disk mapping later...
-hexdump -n 4 -e '1 "0x%08X" 1 "\n"' /dev/urandom > ${build_path}/disk-signature.txt
+# Mount our loopback for the image
+disk_loop_dev=$(losetup -f -P --show ${build_path}/disk.img)
+
+# Now format our partitions since were mounted as a loop device
+mkfs.fat -F 32 -n EFI ${disk_loop_dev}p1
+mkfs.ext4 -L Debian ${disk_loop_dev}p2
+
+# Setup mounts!
+mkdir -p ${build_path}/rootfs
+mount -t ext4 ${disk_loop_dev}p2 ${build_path}/rootfs
+mkdir -p ${build_path}/rootfs/boot/efi
+mount -t vfat ${disk_loop_dev}p1 ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs
@@ -27,10 +37,6 @@ if [[ -d ${root_path}/overlay/${fs_overlay_dir}/ ]]; then
 	echo "Applying ${fs_overlay_dir} overlay"
 	cp -R ${root_path}/overlay/${fs_overlay_dir}/* ./
 fi
-
-# Apply our disk signature to fstab
-UBOOTUUID=$(cat ${build_path}/disk-signature.txt | awk '{print tolower($0)}')
-sed -i "s|PLACEHOLDERUUID|${UBOOTUUID:2}|g" ${build_path}/rootfs/etc/fstab
 
 # Hostname
 echo "${distrib_name}" > ${build_path}/rootfs/etc/hostname
@@ -47,10 +53,27 @@ cp -r ${build_path}/kernel ${build_path}/rootfs/root/
 # Remove the debug kernel
 #rm ${build_path}/rootfs/root/kernel/linux-image-*-dbg_*.deb
 
+# Do mounts for grub
+mount --bind /dev ${build_path}/rootfs/dev
+mount --bind /sys ${build_path}/rootfs/sys
+mount --bind /proc ${build_path}/rootfs/proc
+
 # Kick off bash setup script within chroot
 cp ${docker_scripts_path}/bootstrap/001-bootstrap ${build_path}/rootfs/bootstrap
 chroot ${build_path}/rootfs /bootstrap
 rm ${build_path}/rootfs/bootstrap
 
+# Cleanup mounts for grub
+umount ${build_path}/rootfs/proc
+umount ${build_path}/rootfs/sys
+umount ${build_path}/rootfs/dev
+
+# CD out before cleanup!
+cd ${build_path}
+
 # Final cleanup
 rm ${build_path}/rootfs/usr/bin/qemu-aarch64-static
+umount ${build_path}/rootfs/boot/efi
+umount ${build_path}/rootfs
+losetup -d ${disk_loop_dev}
+rm -rf ${build_path}/rootfs

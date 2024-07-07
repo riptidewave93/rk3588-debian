@@ -1,8 +1,0 @@
-Package: linux-dtbs-KERNELVERSION
-Version: KERNELVERSION-1
-Section: kernel
-Priority: optional
-Architecture: arm64
-Maintainer: Chris Blake <chris@cblake.io>
-Homepage: https://github.com/riptidewave93/rk3588-debian
-Description: Device Trees for rk3588 boards, built from mainline.

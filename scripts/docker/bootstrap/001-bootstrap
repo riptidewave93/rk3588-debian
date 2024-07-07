@@ -23,7 +23,7 @@ apt-get -o Dpkg::Options::="--force-confold" -y --allow-downgrades \
     --allow-remove-essential --allow-change-held-packages install cloud-init \
     bsdextrautils git binutils ca-certificates e2fsprogs haveged parted curl \
     locales console-common openssh-server less vim net-tools wireguard-tools \
-    ntpsec u-boot-tools wget u-boot-menu initramfs-tools network-manager
+    ntpsec u-boot-tools wget initramfs-tools network-manager grub-efi
 
 # Locale gen
 locale-gen
@@ -35,11 +35,12 @@ apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regd
 mkdir -p /lib/firmware/arm/mali/arch10.8
 wget -O /lib/firmware/arm/mali/arch10.8/mali_csffw.bin "https://gitlab.com/firefly-linux/external/libmali/-/raw/rk3588/firefly/firmware/g610/mali_csffw.bin"
 
-# Generate initramfs
+# Generate initramfs for our kernel
 update-initramfs -u -k ${KERN_VERSION}
 
-# Update extlinux
-u-boot-update
+# Install grub
+grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=debian --recheck --no-nvram --removable
+update-grub
 
 # Disable systemd-networkd, we use nmcli AKA NetworkManager
 systemctl disable systemd-networkd
