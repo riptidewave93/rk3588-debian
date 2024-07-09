@@ -40,5 +40,8 @@ mkdir -p ${build_path}/kernel
 make savedefconfig
 mv defconfig ${build_path}/kernel/kernel_config
 
+# Remove the debug kernel (were too cool for that)
+rm ${kernel_builddir}/linux-image-*-dbg_*.deb
+
 # Move our debs to the kernel dir
 mv ${kernel_builddir}/linux-*.deb ${build_path}/kernel

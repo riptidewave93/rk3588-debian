@@ -41,5 +41,6 @@ RUN apt-get update && apt-get install -yq \
     unzip \
     wget \
     xz-utils \
+    zstd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

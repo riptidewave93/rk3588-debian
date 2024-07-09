@@ -52,9 +52,6 @@ console-common	console-data/keymap/full	select	us
 # Copy over kernel goodies
 cp -r ${build_path}/kernel ${build_path}/rootfs/root/
 
-# Remove the debug kernel
-#rm ${build_path}/rootfs/root/kernel/linux-image-*-dbg_*.deb
-
 # Do mounts for grub
 mount --bind /dev ${build_path}/rootfs/dev
 mount --bind /sys ${build_path}/rootfs/sys
