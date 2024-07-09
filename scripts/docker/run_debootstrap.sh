@@ -16,15 +16,17 @@ export DEBCONF_NONINTERACTIVE_SEEN=true
 # Mount our loopback for the image
 disk_loop_dev=$(losetup -f -P --show ${build_path}/disk.img)
 
+# note that p1 is reserved for u-boot
+
 # Now format our partitions since were mounted as a loop device
-mkfs.fat -F 32 -n EFI ${disk_loop_dev}p1
-mkfs.ext4 -L Debian ${disk_loop_dev}p2
+mkfs.fat -F 32 -n EFI ${disk_loop_dev}p2
+mkfs.ext4 -L Debian ${disk_loop_dev}p3
 
 # Setup mounts!
 mkdir -p ${build_path}/rootfs
-mount -t ext4 ${disk_loop_dev}p2 ${build_path}/rootfs
+mount -t ext4 ${disk_loop_dev}p3 ${build_path}/rootfs
 mkdir -p ${build_path}/rootfs/boot/efi
-mount -t vfat ${disk_loop_dev}p1 ${build_path}/rootfs/boot/efi
+mount -t vfat ${disk_loop_dev}p2 ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs

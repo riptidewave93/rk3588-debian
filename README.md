@@ -44,6 +44,8 @@ Default login is username and password of debian.
   - SD Example: `dd if=./debian-rk3588*.img of=/dev/mmcblk0 bs=4M conv=fdatasync`
   - eMMC Example: `rkdeveloptool write 0 ./debian-rk3588*.img`
 
+Note you can flash the `uboot-only-*.img` file, but it only contains a single GPT partition to protect U-Boot. If you decide to use this image, it's recommended to NOT erase the GPT layout, and to add new partitions only. This image is also useful for installing/booting your own OS off of NVMe/USB.
+
 ## To Do
 
 * quartzpro64
@@ -53,6 +55,7 @@ Default login is username and password of debian.
     * Wifi/Bluetooth do not work
       * Known issue, being worked on [here](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/b4f3c74742302298b54025df73d26c5550707c37)
     * Probably more...
+* Display currently does not work, as the HDMI ports are not wired up in the device tree
 * You tell me. Bug reports and PRs welcome!
 
 ## Notes
