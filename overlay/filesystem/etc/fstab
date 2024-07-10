@@ -1,2 +1,0 @@
-PARTLABEL=Debian      /           ext4    discard,errors=remount-ro   0   0
-PARTLABEL=EFI         /boot/efi   vfat    defaults                    0   1

@@ -44,6 +44,10 @@ fi
 echo "${distrib_name}" > ${build_path}/rootfs/etc/hostname
 echo "127.0.1.1	${distrib_name}" >> ${build_path}/rootfs/etc/hosts
 
+# Populate fstab with UUIDs
+echo "UUID=$(findmnt -no uuid ${build_path}/rootfs)  /  ext4  discard,errors=remount-ro  0  0" > ${build_path}/rootfs/etc/fstab
+echo "UUID=$(findmnt -no uuid ${build_path}/rootfs/boot/efi)  /boot/efi  vfat  defaults  0  1" >> ${build_path}/rootfs/etc/fstab
+
 # Console settings
 echo "console-common	console-data/keymap/policy	select	Select keymap from full list
 console-common	console-data/keymap/full	select	us
