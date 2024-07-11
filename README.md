@@ -49,15 +49,14 @@ Note you can flash the `uboot-only-*.img` file, but it only contains a single GP
 ## To Do
 
 * QuartzPro64
-  * Fixup/finish kernel device tree
-    * USB3 does not work
-      * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c)
-    * Wifi/Bluetooth do not work
-      * Known issue, being worked on [here](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/b4f3c74742302298b54025df73d26c5550707c37)
-    * HDMI1 does not work
-    * Probably more...
+  * USB3 does not work
+    * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c)
+  * Wifi/Bluetooth do not work
+    * Known issue, being worked on [here](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/b4f3c74742302298b54025df73d26c5550707c37)
+  * HDMI1 does not work
+  * Probably more...
 * Rock 5A
-  * HDMI Output does not work
+  * HDMI1 does not work
 * You tell me. Bug reports and PRs welcome!
 
 ## Notes
