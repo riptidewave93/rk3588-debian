@@ -8,7 +8,7 @@
 #include "rk3588s.dtsi"
 
 / {
-	model = "Radxa ROCK 5 Model A";
+	model = "Radxa ROCK 5A";
 	compatible = "radxa,rock-5a", "rockchip,rk3588s";
 
 	aliases {
@@ -379,10 +379,10 @@
 	no-sdio;
 	no-sd;
 	non-removable;
-	max-frequency = <150000000>;
-	mmc-hs200-1_8v;
 	// mmc-hs400-1_8v;
 	// mmc-hs400-enhanced-strobe;
+	max-frequency = <150000000>;
+	mmc-hs200-1_8v;
 	status = "okay";
 };
 
@@ -440,7 +440,7 @@
 		#gpio-cells = <2>;
 
 		rk806_dvs1_null: dvs1-null-pins {
-			pins = "gpio_pwrctrl2";
+			pins = "gpio_pwrctrl1";
 			function = "pin_fun0";
 		};
 
