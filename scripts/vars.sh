@@ -19,7 +19,7 @@ toolchain_cross_compile="aarch64-none-linux-gnu-"
 # We are using the upstream patch + crypto enable patch, so we can move away from RK's prebuilt. We are using:
 # https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840/ - rk3588 support
 # https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/29363/ - crypto patch (based on rk3588 support)
-atf_src="https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a/+archive/c805c14c1026b3ae5445e211c2101c60cd76ad0e.tar.gz"
+atf_src="https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a/+archive/382a630dd6fcf7c5e52576054014a46f1749a11f.tar.gz"
 atf_filename="$(basename ${atf_src})"
 atf_platform="rk3588"
 

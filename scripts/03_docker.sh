@@ -40,19 +40,8 @@ if mountpoint -q ${build_path}/rootfs; then
     sudo umount ${build_path}/rootfs
 fi
 
-# Validate we don't have image files yet, because if we do, they may be mounted, and
-# that would be REAL BAD if we overwrite em
-if [ -f ${build_path}/efi.vfat ]; then
-    error_msg "ERROR: ${build_path}/efi.vfat exists already! Cleaning up..."
-    rm -f ${build_path}/efi.vfat
-fi
-if [ -f ${build_path}/rootfs.ext4 ]; then
-    error_msg "ERROR: ${build_path}/rootfs.ext4 exists already! Cleaning up..."
-    rm -f ${build_path}/rootfs.ext4
-fi
-
-debug_msg "Docker: Generating disk image..."
-docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -it ${docker_tag} /repo/scripts/docker/build_image.sh
+debug_msg "Docker: Generating Disk Images..."
+docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -it ${docker_tag} /repo/scripts/docker/build_image.sh
 
 debug_msg "Docker: debootstraping..."
 docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -it ${docker_tag} /repo/scripts/docker/run_debootstrap.sh

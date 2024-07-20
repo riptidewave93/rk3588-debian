@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -yq \
     libconfuse-common \
     libconfuse-dev \
     libelf-dev \
+    libgnutls28-dev \
     libncurses-dev \
     libssl-dev \
     lvm2 \
@@ -39,6 +40,7 @@ RUN apt-get update && apt-get install -yq \
     rsync \
     swig \
     unzip \
+    uuid-dev \
     wget \
     xz-utils \
     zstd \
