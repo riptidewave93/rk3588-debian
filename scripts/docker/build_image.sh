@@ -14,10 +14,8 @@ parted ${build_path}/disk.img --script mktable gpt \
     set 1 hidden on \
     mkpart EFI fat32 16384KiB 528MiB \
     set 2 boot on \
-    set 2 esp on
-
-# Add rootfs partition (start at 554MB, aka end of EFI)
-parted ${build_path}/disk.img --script mkpart Debian ext4 554MB 100%
+    set 2 esp on \
+    mkpart Debian ext4 554MB 100%
 
 # Also generate our bootloader disk image for those who run thier own OS
 truncate -s 32M ${build_path}/bootloader.img
