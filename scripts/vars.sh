@@ -28,8 +28,8 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/a2a0b89b6c8c612dca5ed9ed8a6
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.10-rc1.zip"
-uboot_filename="u-boot-2024.10-rc1.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.10-rc2.zip"
+uboot_filename="u-boot-2024.10-rc2.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel

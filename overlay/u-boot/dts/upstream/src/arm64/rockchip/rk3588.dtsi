@@ -11,12 +11,17 @@
 		#address-cells = <2>;
 		#size-cells = <2>;
 		ranges;
+
 		/*
 		 * The 4k HDMI capture controller works only with 32bit
 		 * phys addresses and doesn't support IOMMU. HDMI RX CMA
 		 * must be reserved below 4GB.
+		 * The size of 160MB was determined as follows:
+		 * (3840 * 2160 pixels) * (4 bytes/pixel) * (2 frames/buffer) / 10^6 = 66MB
+		 * To ensure sufficient support for practical use-cases,
+		 * we doubled the 66MB value.
 		 */
-		hdmirx_cma: hdmirx_cma {
+		hdmi_receiver_cma: hdmi-receiver-cma {
 			compatible = "shared-dma-pool";
 			alloc-ranges = <0x0 0x0 0x0 0xffffffff>;
 			size = <0x0 (160 * 0x100000)>; /* 160MiB */
@@ -153,12 +158,12 @@
 		status = "disabled";
 	};
 
-	hdmirx_ctrler: hdmirx-controller@fdee0000 {
+	hdmi_receiver: hdmi_receiver@fdee0000 {
 		compatible = "rockchip,rk3588-hdmirx-ctrler", "snps,dw-hdmi-rx";
 		reg = <0x0 0xfdee0000 0x0 0x6000>;
 		power-domains = <&power RK3588_PD_VO1>;
 		rockchip,grf = <&sys_grf>;
-		rockchip,vo1_grf = <&vo1_grf>;
+		rockchip,vo1-grf = <&vo1_grf>;
 		interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH 0>,
 			     <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH 0>,
 			     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH 0>;
@@ -179,7 +184,8 @@
 			      "hclk_vo1";
 		resets = <&cru SRST_A_HDMIRX>, <&cru SRST_P_HDMIRX>,
 			 <&cru SRST_HDMIRX_REF>, <&cru SRST_A_HDMIRX_BIU>;
-		reset-names = "rst_a", "rst_p", "rst_ref", "rst_biu";
+		reset-names = "axi", "apb", "ref", "biu";
+		memory-region = <&hdmi_receiver_cma>;
 		pinctrl-0 = <&hdmim1_rx>;
 		pinctrl-names = "default";
 		status = "disabled";

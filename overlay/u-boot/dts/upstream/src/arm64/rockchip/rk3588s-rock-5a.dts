@@ -252,6 +252,17 @@
 	};
 };
 
+/* Enable DS3231 RPi RTC Module */
+&i2c8 {
+	status = "okay";
+	pinctrl-0 = <&i2c8m2_xfer>;
+
+	rtc@68 {
+		compatible = "maxim,ds3231";
+		reg = <0x68>;
+	};
+};
+
 &i2s0_8ch {
 	pinctrl-names = "default";
 	pinctrl-0 = <&i2s0_lrck

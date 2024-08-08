@@ -307,16 +307,16 @@
 	};
 };
 
-&hdmirx_cma {
+&hdmi_receiver_cma {
 	status = "okay";
 };
 
-&hdmirx_ctrler {
+&hdmi_receiver {
 	status = "okay";
-	hdmirx-5v-detection-gpios = <&gpio1 RK_PC6 GPIO_ACTIVE_LOW>;
+	hdmirx-5v-detection-gpios = <&gpio2 RK_PB5 GPIO_ACTIVE_LOW>;
 	pinctrl-0 = <&hdmim1_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_5v_detection>;
 	pinctrl-names = "default";
-	memory-region = <&hdmirx_cma>;
+	memory-region = <&hdmi_receiver_cma>;
 };
 
 &hdptxphy_hdmi0 {
