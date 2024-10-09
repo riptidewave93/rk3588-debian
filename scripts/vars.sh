@@ -16,11 +16,8 @@ toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
 
 # Arm Trusted Firmware
-# We are using the upstream patch + crypto enable patch, so we can move away from RK's prebuilt. We are using:
-# https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840/ - rk3588 support
-# https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/29363/ - crypto patch (based on rk3588 support)
-atf_src="https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a/+archive/382a630dd6fcf7c5e52576054014a46f1749a11f.tar.gz"
-atf_filename="$(basename ${atf_src})"
+atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/5765e0c95ae04119b90fb4c4ce27de032fc4404a.tar.gz"
+atf_filename="arm-trusted-firmware-5765e0c95ae04119b90fb4c4ce27de032fc4404a.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
@@ -28,23 +25,27 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/a2a0b89b6c8c612dca5ed9ed8a6
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.10-rc2.zip"
-uboot_filename="u-boot-2024.10-rc2.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.10.zip"
+uboot_filename="u-boot-2024.10.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/rk3588/linux-rk3588.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/rk3588-test/linux-rk3588-test.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
 
 # Distro
 distrib_name="debian"
-#deb_mirror="http://ftp.us.debian.org/debian"
-deb_mirror="http://debian.uchicago.edu/debian"
+deb_mirror="http://ftp.us.debian.org/debian"
 deb_release="bookworm"
 deb_arch="arm64"
 fs_overlay_dir="filesystem"
+
+# Set BOOTLOADER_ONLY based on a flag file
+if [ -f "${build_path}/.bootloader-only" ]; then
+    BOOTLOADER_ONLY=true
+fi
 
 debug_msg () {
     BLU='\033[0;32m'

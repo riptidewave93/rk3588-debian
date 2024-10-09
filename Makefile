@@ -12,6 +12,14 @@ build: setup
 		bash $${file};			\
 	done					\
 
+bootloader: setup
+	@set -e;	\
+	export BOOTLOADER_ONLY=true; \
+	for file in `ls ./scripts/[0-99]*.sh`;	\
+	do					\
+		bash $${file};			\
+	done					\
+
 clean: mountclean
 	sudo rm -rf $(CURDIR)/BuildEnv; \
 	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME) | awk '{print $$1 }' | xargs -I {} docker rm {};

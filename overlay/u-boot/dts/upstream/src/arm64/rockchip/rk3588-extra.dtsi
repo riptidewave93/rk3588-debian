@@ -3,8 +3,8 @@
  * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
  */
 
-#include "rk3588s.dtsi"
-#include "rk3588-pinctrl.dtsi"
+#include "rk3588-base.dtsi"
+#include "rk3588-extra-pinctrl.dtsi"
 
 / {
 	reserved-memory {
@@ -165,7 +165,7 @@
 		rockchip,grf = <&sys_grf>;
 		rockchip,vo1-grf = <&vo1_grf>;
 		interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH 0>,
-			     <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH 0>,
+			     <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH 0>,
 			     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH 0>;
 		interrupt-names = "cec", "hdmi", "dma";
 		clocks = <&cru ACLK_HDMIRX>,
