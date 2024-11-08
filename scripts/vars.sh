@@ -21,12 +21,12 @@ atf_filename="arm-trusted-firmware-5765e0c95ae04119b90fb4c4ce27de032fc4404a.tar.
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
-tpl_src="https://github.com/rockchip-linux/rkbin/raw/a2a0b89b6c8c612dca5ed9ed8a68db8a07f68bc0/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin"
+tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5dc62aae934b2b/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2024.10.zip"
-uboot_filename="u-boot-2024.10.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.01-rc1.zip"
+uboot_filename="u-boot-2025.01-rc1.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel

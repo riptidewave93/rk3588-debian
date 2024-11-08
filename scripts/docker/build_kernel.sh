@@ -9,9 +9,8 @@ kernel_builddir=$(mktemp -d)
 tar -xzf ${root_path}/downloads/${kernel_filename} -C ${kernel_builddir}
 
 # Exports baby
-export PATH=${build_path}/toolchain/${toolchain_bin_path}:${PATH}
 export GCC_COLORS=auto
-export CROSS_COMPILE=${toolchain_cross_compile}
+export CROSS_COMPILE="aarch64-linux-gnu-" # Use built in arm64 toolchain for dpkg-buildpackage to be happy
 export ARCH=arm64
 
 # Here we go

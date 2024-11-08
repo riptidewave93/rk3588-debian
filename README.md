@@ -4,9 +4,9 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rk3588 mainline test branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commits/rk3588-test/?ref_type=heads)
+- Linux Kernel - [Collabora's rk3588-test branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commits/rk3588-test/?ref_type=heads)
 - Arm Trusted Firmware - [Mainline at commit 5765e0c](https://github.com/ARM-software/arm-trusted-firmware/tree/5765e0c95ae04119b90fb4c4ce27de032fc4404a)
-- Mainline U-Boot - [v2024.10](https://github.com/u-boot/u-boot/tree/v2024.10)
+- Mainline U-Boot - [v2025.01-rc1](https://github.com/u-boot/u-boot/tree/v2025.01-rc1)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 

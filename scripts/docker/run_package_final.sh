@@ -5,6 +5,9 @@ docker_scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 . ${scripts_path}/vars.sh
 
+# Build timestamp
+TIMESTAMP=`date +%Y%m%d-%H%M`
+
 # setup our workdir
 mkdir -p ${build_path}/final
 
@@ -26,20 +29,20 @@ for board in "${supported_devices[@]}"; do
     fi
 done
 
-# Just create our final dir and move bits over
-TIMESTAMP=`date +%Y%m%d-%H%M`
 
-# Move bootloader image
+# Move bootloaders
 mkdir -p ${root_path}/output/${TIMESTAMP}/u-boot
 mv ${build_path}/uboot/*.uboot ${root_path}/output/${TIMESTAMP}/u-boot/
+mv ${build_path}/final/uboot-only-*.img.xz ${root_path}/output/${TIMESTAMP}/
+
+# Move kernel
 mkdir -p ${root_path}/output/${TIMESTAMP}/kernel
 mv ${build_path}/kernel/linux-*.deb ${root_path}/output/${TIMESTAMP}/kernel/
-mv ${build_path}/final/uboot-only-${board}.img.xz ${root_path}/output/${TIMESTAMP}/
 
-# Full build actions
+# Were we not just bootloader?
 if [ -z "${BOOTLOADER_ONLY}" ]; then
     # Move debian image
-    mv ${build_path}/final/debian-${board}.img.xz ${root_path}/output/${TIMESTAMP}/
+    mv ${build_path}/final/debian-.*.img.xz ${root_path}/output/${TIMESTAMP}/
 fi
 
 rm -rf ${build_path}
