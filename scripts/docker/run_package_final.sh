@@ -42,7 +42,7 @@ mv ${build_path}/kernel/linux-*.deb ${root_path}/output/${TIMESTAMP}/kernel/
 # Were we not just bootloader?
 if [ -z "${BOOTLOADER_ONLY}" ]; then
     # Move debian image
-    mv ${build_path}/final/debian-.*.img.xz ${root_path}/output/${TIMESTAMP}/
+    mv ${build_path}/final/debian-*.img.xz ${root_path}/output/${TIMESTAMP}/
 fi
 
 rm -rf ${build_path}
