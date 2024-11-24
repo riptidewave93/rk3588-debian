@@ -4,9 +4,9 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rk3588-test branch](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commits/rk3588-test/?ref_type=heads)
+- Linux Kernel - [Collabora's rk3588-test branch at commit 0a63017c](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/0a63017ccfdf8a13f0e30f34160788585dba23d4)
 - Arm Trusted Firmware - [Mainline at commit 5765e0c](https://github.com/ARM-software/arm-trusted-firmware/tree/5765e0c95ae04119b90fb4c4ce27de032fc4404a)
-- Mainline U-Boot - [v2025.01-rc1](https://github.com/u-boot/u-boot/tree/v2025.01-rc1)
+- Mainline U-Boot - [v2025.01-rc2](https://github.com/u-boot/u-boot/tree/v2025.01-rc2)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 
@@ -56,17 +56,19 @@ Note that without qemu-user-static, debootstrap will fail!
 
 Note you can flash the `uboot-only-*.img` file, but it only contains a single GPT partition to protect U-Boot. If you decide to use this image, it's recommended to NOT erase the GPT layout, and to add new partitions only. This image is also useful for installing/booting your own OS off of NVMe/USB.
 
-## To Do
+Note that if you want to manually flash the .uboot image to update an existing install, this can be done with something similar to below. Just be sure to update the target block device to match where your u-boot image currently lives.
 
-* QuartzPro64
-  * USB3 does not work
-    * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c)
-  * Wifi/Bluetooth do not work
-    * Known issue, being worked on [here](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/commit/b4f3c74742302298b54025df73d26c5550707c37)
-  * HDMI1 does not work
-  * Probably more...
-* Rock 5A
-  * HDMI1 does not work
+`dd if=./rk3588-BOARDNAME.uboot of=/dev/mmcblk0 bs=32k seek=1 conv=notrunc`
+
+## To Do
+* All Boards
+  * HDM1 does not work
+  * No NPU support (should be ready soon)
+* Board Specific
+  * QuartzPro64
+    * USB3 does not work
+      * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c), or can look at using [fcs,fusb302](https://github.com/torvalds/linux/blob/v6.12/drivers/usb/typec/tcpm/fusb302.c) as it [should work](https://en.hynetek.com/2567.html).
+
 * You tell me. Bug reports and PRs welcome!
 
 ## Notes

@@ -85,6 +85,17 @@
 		sound-name-prefix = "Speaker Amp";
 	};
 
+	hdmi0-con {
+		compatible = "hdmi-connector";
+		type = "a";
+
+		port {
+			hdmi0_con_in: endpoint {
+				remote-endpoint = <&hdmi0_out_con>;
+			};
+		};
+	};
+
 	leds {
 		compatible = "gpio-leds";
 		pinctrl-names = "default";
@@ -105,7 +116,7 @@
 		simple-audio-card,aux-devs = <&speaker_amp>, <&headphone_amp>;
 		simple-audio-card,format = "i2s";
 		simple-audio-card,mclk-fs = <256>;
-		simple-audio-card,hp-det-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		simple-audio-card,hp-det-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
 		simple-audio-card,bitclock-master = <&daicpu>;
 		simple-audio-card,frame-master = <&daicpu>;
 		/* SARADC_IN3 is used as MIC detection / key input */
@@ -150,7 +161,7 @@
 		};
 	};
 
-	vcc12v_dcin: vcc12v-dcin-regulator {
+	vcc12v_dcin: regulator-vcc12v-dcin {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc12v_dcin";
 		regulator-always-on;
@@ -159,7 +170,7 @@
 		regulator-max-microvolt = <12000000>;
 	};
 
-	vcc3v3_bt: vcc3v3-bt-regulator {
+	vcc3v3_bt: regulator-vcc3v3-bt {
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpios = <&gpio3 RK_PA6 GPIO_ACTIVE_HIGH>;
@@ -170,10 +181,12 @@
 		vin-supply = <&vcc_3v3_s0>;
 	};
 
-	vcc3v3_pcie30: vcc3v3-pcie30-regulator {
+	vcc3v3_pcie30: regulator-vcc3v3-pcie30 {
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpios = <&gpio3 RK_PC3 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc3v3_pcie30_en>;
 		regulator-name = "vcc3v3_pcie30";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
@@ -181,9 +194,11 @@
 		vin-supply = <&vcc12v_dcin>;
 	};
 
-	vcc3v3_wf: vcc3v3-wf-regulator {
+	vcc3v3_wf: regulator-vcc3v3-wf {
 		compatible = "regulator-fixed";
 		enable-active-high;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_pwren>;
 		gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
 		regulator-name = "vcc3v3_wf";
 		regulator-min-microvolt = <3300000>;
@@ -192,7 +207,7 @@
 		vin-supply = <&vcc_3v3_s0>;
 	};
 
-	vcc4v0_sys: vcc4v0-sys-regulator {
+	vcc4v0_sys: regulator-vcc4v0-sys {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc4v0_sys";
 		regulator-always-on;
@@ -202,7 +217,7 @@
 		vin-supply = <&vcc12v_dcin>;
 	};
 
-	vcc5v0_host: vcc5v0-host-regulator {
+	vcc5v0_host: regulator-vcc5v0-host {
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpio = <&gpio4 RK_PB0 GPIO_ACTIVE_HIGH>;
@@ -216,7 +231,7 @@
 		vin-supply = <&vcc5v0_usb>;
 	};
 
-	vcc5v0_usb: vcc5v0-usb-regulator {
+	vcc5v0_usb: regulator-vcc5v0-usb {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc5v0_usb";
 		regulator-always-on;
@@ -286,11 +301,6 @@
 	status = "okay";
 };
 
-&display_subsystem {
-	clocks = <&hdptxphy_hdmi0>;
-	clock-names = "hdmi0_phy_pll";
-};
-
 &gpu {
 	mali-supply = <&vdd_gpu_s0>;
 	sram-supply = <&vdd_gpu_mem_s0>;
@@ -307,14 +317,20 @@
 	};
 };
 
+&hdmi0_out {
+	hdmi0_out_con: endpoint {
+		remote-endpoint = <&hdmi0_con_in>;
+	};
+};
+
 &hdmi_receiver_cma {
 	status = "okay";
 };
 
 &hdmi_receiver {
 	status = "okay";
-	hdmirx-5v-detection-gpios = <&gpio2 RK_PB5 GPIO_ACTIVE_LOW>;
-	pinctrl-0 = <&hdmim1_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_5v_detection>;
+	hpd-gpios = <&gpio2 RK_PB5 GPIO_ACTIVE_LOW>;
+	pinctrl-0 = <&hdmim1_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_hpd>;
 	pinctrl-names = "default";
 	memory-region = <&hdmi_receiver_cma>;
 };
@@ -348,7 +364,6 @@
 		assigned-clocks = <&cru I2S0_8CH_MCLKOUT>;
 		assigned-clock-rates = <12288000>;
 		clocks = <&cru I2S0_8CH_MCLKOUT>;
-		clock-names = "mclk";
 		AVDD-supply = <&avcc_1v8_codec_s0>;
 		DVDD-supply = <&avcc_1v8_codec_s0>;
 		HPVDD-supply = <&vcc_3v3_s0>;
@@ -386,7 +401,7 @@
 
 &pinctrl {
 	hdmirx {
-		hdmirx_5v_detection: hdmirx-5v-detection {
+		hdmirx_hpd: hdmirx-5v-detection {
 			rockchip,pins = <2 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
@@ -400,6 +415,42 @@
 	leds {
 		led_pins: led-pins {
 			rockchip,pins = <3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	pcie2 {
+		pcie2_0_rst: pcie2-0-rst {
+			rockchip,pins = <4 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		pcie2_0_wake: pcie2-0-wake {
+			rockchip,pins = <4 RK_PA4 4 &pcfg_pull_none>;
+		};
+
+		pcie2_0_clkreq: pcie2-0-clkreq {
+			rockchip,pins = <4 RK_PA3 4 &pcfg_pull_none>;
+		};
+
+		pcie2_1_rst: pcie2-1-rst {
+			rockchip,pins = <4 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		pcie2_1_wake: pcie2-1-wake {
+			rockchip,pins = <4 RK_PA1 4 &pcfg_pull_none>;
+		};
+
+		pcie2_1_clkreq: pcie2-1-clkreq {
+			rockchip,pins = <4 RK_PA0 4 &pcfg_pull_none>;
+		};
+	};
+
+	pcie3 {
+		pcie3_reset: pcie3-reset {
+			rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		vcc3v3_pcie30_en: vcc3v3-pcie30-en {
+			rockchip,pins = <3 RK_PC3 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 
@@ -427,19 +478,47 @@
 			rockchip,pins = <4 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
+
+	wlan {
+		wifi_host_wake_irq: wifi-host-wake-irq {
+			rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_down>;
+		};
+
+		wifi_pwren: wifi-pwren {
+			rockchip,pins = <3 RK_PB1 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
 };
 
 /* WIFI */
 &pcie2x1l0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie2_0_rst>, <&pcie2_0_wake>, <&pcie2_0_clkreq>, <&wifi_host_wake_irq>;
 	reset-gpios = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_wf>;
 	status = "okay";
+
+	pcie@0,0 {
+		reg = <0x200000 0 0 0 0>;
+		#address-cells = <3>;
+		#size-cells = <2>;
+		ranges;
+		device_type = "pci";
+		bus-range = <0x20 0x2f>;
+
+		wifi: wifi@0,0 {
+			compatible = "pci14e4,449d";
+			reg = <0x210000 0 0 0 0>;
+			clocks = <&hym8563>;
+			clock-names = "lpo";
+		};
+	};
 };
 
 /* GMAC1 */
 &pcie2x1l1 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&rtl8111_isolate>;
+	pinctrl-0 = <&pcie2_1_rst>, <&pcie2_1_wake>, <&pcie2_1_clkreq>, <&rtl8111_isolate>;
 	reset-gpios = <&gpio4 RK_PA2 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
@@ -448,7 +527,10 @@
 	status = "okay";
 };
 
+/* PCIE Slot */
 &pcie3x4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie3_reset>;
 	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_pcie30>;
 	status = "okay";

@@ -25,12 +25,12 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.01-rc1.zip"
-uboot_filename="u-boot-2025.01-rc1.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.01-rc2.zip"
+uboot_filename="u-boot-2025.01-rc2.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/rk3588-test/linux-rk3588-test.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/0a63017ccfdf8a13f0e30f34160788585dba23d4/linux-0a63017ccfdf8a13f0e30f34160788585dba23d4.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"

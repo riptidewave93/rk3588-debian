@@ -38,6 +38,7 @@ mv ${build_path}/final/uboot-only-*.img.xz ${root_path}/output/${TIMESTAMP}/
 # Move kernel
 mkdir -p ${root_path}/output/${TIMESTAMP}/kernel
 mv ${build_path}/kernel/linux-*.deb ${root_path}/output/${TIMESTAMP}/kernel/
+mv ${build_path}/kernel/kernel_config ${root_path}/output/${TIMESTAMP}/kernel/
 
 # Were we not just bootloader?
 if [ -z "${BOOTLOADER_ONLY}" ]; then

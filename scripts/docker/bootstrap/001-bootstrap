@@ -35,6 +35,11 @@ apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regd
 mkdir -p /lib/firmware/arm/mali/arch10.8
 wget -O /lib/firmware/arm/mali/arch10.8/mali_csffw.bin "https://gitlab.com/firefly-linux/external/libmali/-/raw/rk3588/firefly/firmware/g610/mali_csffw.bin"
 
+# Add our BRCM firmwares for quartzpro64
+wget -O /lib/firmware/brcm/brcmfmac43752-pcie.bin "https://github.com/armbian/firmware/raw/refs/heads/master/brcm/brcmfmac43752-pcie.bin"
+wget -O /lib/firmware/brcm/brcmfmac43752-pcie.clm_blob "https://github.com/armbian/firmware/raw/refs/heads/master/brcm/brcmfmac43752-pcie.clm_blob"
+wget -O /lib/firmware/brcm/brcmfmac43752-pcie.txt "https://github.com/armbian/firmware/raw/refs/heads/master/brcm/brcmfmac43752-pcie.txt"
+
 # Generate initramfs for our kernel
 update-initramfs -u -k ${KERN_VERSION}
 
