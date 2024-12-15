@@ -42,8 +42,20 @@ for board in "${supported_devices[@]}"; do
     cfg+="_defconfig"
     make distclean
     make ${cfg}
-    make -j`getconf _NPROCESSORS_ONLN` || cat ./arch/arm/dts/.rk3588-quartzpro64.dtb.pre.tmp
+    make -j`getconf _NPROCESSORS_ONLN`
+
+    # Save the config
+    make savedefconfig
+    mv defconfig ${build_path}/uboot/${board}_defconfig
+
+    # Save the MMC U-Boot image (always exists)
     mv u-boot-rockchip.bin ${build_path}/uboot/${board}.uboot
-    #make savedefconfig
-    #mv defconfig ${build_path}/uboot/${board}_defconfig
+
+    # IF we have an SPI image, save that as well!
+    if [ -f "u-boot-rockchip-spi.bin" ]; then
+        mv u-boot-rockchip-spi.bin ${build_path}/uboot/${board}-spi.uboot
+    fi
+
+    # Also save u-boot dtb
+    mv u-boot.dtb ${build_path}/uboot/${board}.dtb
 done

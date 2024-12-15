@@ -7,7 +7,7 @@ build_path="${root_path}/BuildEnv"
 docker_tag=rk3588-builder:builder
 
 # Supported Devices
-supported_devices=(rk3588-quartzpro64 rk3588s-rock-5a)
+supported_devices=(rk3588-quartzpro64 rk3588s-rock-5a rk3588-rock-5b-plus)
 
 # Toolchain
 toolchain_url="https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
@@ -25,12 +25,12 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.01-rc3.zip"
-uboot_filename="u-boot-2025.01-rc3.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.01-rc4.zip"
+uboot_filename="u-boot-2025.01-rc4.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/3b5180306d5e009272ef1fc09a571beabec5964c/linux-3b5180306d5e009272ef1fc09a571beabec5964c.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/f7e1ed901e7c3a426bde1a787c3bd1ecf45eb410/linux-f7e1ed901e7c3a426bde1a787c3bd1ecf45eb410.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"

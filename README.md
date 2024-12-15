@@ -4,9 +4,9 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rk3588-test branch at commit 3b518030](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/3b5180306d5e009272ef1fc09a571beabec5964c)
+- Linux Kernel - [Collabora's rk3588-test branch at commit f7e1ed90](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/f7e1ed901e7c3a426bde1a787c3bd1ecf45eb410)
 - Arm Trusted Firmware - [Mainline at commit f340f3d](https://github.com/ARM-software/arm-trusted-firmware/tree/f340f3d891b7184e1ab790955137d508b45a63cd)
-- Mainline U-Boot - [v2025.01-rc3](https://github.com/u-boot/u-boot/tree/v2025.01-rc3)
+- Mainline U-Boot - [v2025.01-rc4](https://github.com/u-boot/u-boot/tree/v2025.01-rc4)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 
@@ -15,6 +15,7 @@ Note that there are patches/modifications applied to the kernel and u-boot. The 
 Currently images for the following devices are generated:
 * Pine64 QuartzPro64
 * Raxda Rock 5A
+* Raxda Rock 5B Plus
 
 ## Requirements
 
@@ -68,6 +69,9 @@ Note that if you want to manually flash the .uboot image to update an existing i
   * QuartzPro64
     * USB3 does not work
       * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c), or can look at using [fcs,fusb302](https://github.com/torvalds/linux/blob/v6.12/drivers/usb/typec/tcpm/fusb302.c) as it [should work](https://en.hynetek.com/2567.html).
+  * Rock 5B Plus
+    * Front Type-C port does not work correctly in Linux
+    * U-Boot doesn't use the correct MAC, [rtl8169.c](https://github.com/u-boot/u-boot/blob/b841e559cd26ffcb20f22e8ee75debed9616c002/drivers/net/rtl8169.c#L1091-L1097) doesn't support `read_rom_hwaddr`, which would [fix this](https://github.com/u-boot/u-boot/blob/b841e559cd26ffcb20f22e8ee75debed9616c002/net/eth-uclass.c#L597-L620).
 
 * You tell me. Bug reports and PRs welcome!
 

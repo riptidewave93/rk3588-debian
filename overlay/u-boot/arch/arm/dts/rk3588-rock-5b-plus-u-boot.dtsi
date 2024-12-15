@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2023 Collabora Ltd.
+ */
+
+#include <dt-bindings/usb/pd.h>
+#include "rk3588-u-boot.dtsi"
+
+/ {
+	leds {
+		led_rgb_b {
+			default-state = "on";
+		};
+	};
+};
+
+&fspim2_pins {
+	bootph-pre-ram;
+	bootph-some-ram;
+};
+
+&i2c4 {
+	usbc0: usb-typec@22 {
+		status = "okay";
+	};
+};
+
+&sdhci {
+	cap-mmc-highspeed;
+};
+
+&sfc {
+	flash@0 {
+		bootph-pre-ram;
+		bootph-some-ram;
+	};
+};
+
+&u2phy0 {
+	status = "okay";
+};
+
+&u2phy0_otg {
+	status = "okay";
+};
+
+&usbdp_phy0 {
+	status = "okay";
+};
+
+&usb_host0_xhci {
+	dr_mode = "peripheral";
+	maximum-speed = "high-speed";
+	status = "okay";
+};
+
+/* Power our M.2 3.3v + PCIe clock generator */
+&vcc3v3_pi6c_05 {
+	regulator-always-on;
+};
