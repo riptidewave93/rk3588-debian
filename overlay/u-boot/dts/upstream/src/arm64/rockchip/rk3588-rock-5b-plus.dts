@@ -15,11 +15,24 @@
 	aliases {
 		mmc0 = &sdhci;
 		mmc1 = &sdmmc;
-		mmc2 = &sdio;
 	};
 
 	chosen {
 		stdout-path = "serial2:1500000n8";
+	};
+
+	adc-keys {
+		compatible = "adc-keys";
+		io-channels = <&saradc 1>;
+		io-channel-names = "buttons";
+		keyup-threshold-microvolt = <1800000>;
+		poll-interval = <100>;
+
+		button-recovery {
+			label = "Recovery";
+			linux,code = <KEY_VENDOR>;
+			press-threshold-microvolt = <18000>;
+		};
 	};
 
 	analog-sound {
@@ -59,7 +72,7 @@
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_BLUE>;
 			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "disk-activity";
+			linux,default-trigger = "mmc1";
 		};
 	};
 
@@ -587,6 +600,7 @@
 	status = "okay";
 };
 
+/* SD Card */
 &sdhci {
 	bus-width = <8>;
 	no-sdio;
@@ -597,6 +611,7 @@
 	status = "okay";
 };
 
+/* EMMc */
 &sdmmc {
 	max-frequency = <200000000>;
 	no-sdio;
@@ -609,27 +624,6 @@
 	sd-uhs-sdr104;
 	vmmc-supply = <&vcc_3v3_s3>;
 	vqmmc-supply = <&vccio_sd_s0>;
-	status = "okay";
-};
-
-&sdio {
-	max-frequency = <200000000>;
-	no-sd;
-	no-mmc;
-	non-removable;
-	bus-width = <4>;
-	cap-sdio-irq;
-	disable-wp;
-	keep-power-in-suspend;
-	wakeup-source;
-	sd-uhs-sdr12;
-	sd-uhs-sdr25;
-	sd-uhs-sdr50;
-	sd-uhs-sdr104;
-	vmmc-supply = <&vcc3v3_pcie2x1l0>;
-	vqmmc-supply = <&vcc_1v8_s3>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&sdiom0_pins>;
 	status = "okay";
 };
 
