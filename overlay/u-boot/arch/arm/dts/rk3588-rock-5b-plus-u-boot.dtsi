@@ -8,7 +8,7 @@
 
 / {
 	leds {
-		led_rgb_b {
+		led-0 {
 			default-state = "on";
 		};
 	};

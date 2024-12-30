@@ -70,7 +70,6 @@ Note that if you want to manually flash the .uboot image to update an existing i
     * USB3 does not work
       * Requires [hynetek,husb311 driver port](https://github.com/radxa/kernel/blob/linux-6.1-stan-rkr1/drivers/usb/typec/tcpm/tcpci_husb311.c), or can look at using [fcs,fusb302](https://github.com/torvalds/linux/blob/v6.12/drivers/usb/typec/tcpm/fusb302.c) as it [should work](https://en.hynetek.com/2567.html).
   * Rock 5B Plus
-    * Front Type-C port does not work correctly, disabled for now
     * U-Boot doesn't use the correct MAC, [rtl8169.c](https://github.com/u-boot/u-boot/blob/b841e559cd26ffcb20f22e8ee75debed9616c002/drivers/net/rtl8169.c#L1091-L1097) doesn't support `read_rom_hwaddr`, which would [fix this](https://github.com/u-boot/u-boot/blob/b841e559cd26ffcb20f22e8ee75debed9616c002/net/eth-uclass.c#L597-L620).
       * Workaround from U-Boot CLI:
         ```
@@ -79,7 +78,7 @@ Note that if you want to manually flash the .uboot image to update an existing i
         saveenv
         reset
         ```
-    * Ethernet in U-Boot does NOT WORK on a warm reboot/reset, due to the driver being very limited/slim and not playing nice after linux initialization.
+    * Ethernet in U-Boot does NOT WORK on a warm reboot/reset, due to the u-boot driver being very limited/slim and not playing nice after linux initialization.
 
 * You tell me. Bug reports and PRs welcome!
 

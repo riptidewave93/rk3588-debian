@@ -22,17 +22,17 @@
 		stdout-path = "serial2:1500000n8";
 	};
 
-	adc-keys {
+	keys-1 {
 		compatible = "adc-keys";
 		io-channels = <&saradc 1>;
 		io-channel-names = "buttons";
-		keyup-threshold-microvolt = <1800000>;
+		keyup-threshold-microvolt = <18000>;
 		poll-interval = <100>;
 
 		button-recovery {
 			label = "Recovery";
-			linux,code = <KEY_VENDOR>;
-			press-threshold-microvolt = <18000>;
+			linux,code = <BTN_0>;
+			press-threshold-microvolt = <0>;
 		};
 	};
 
@@ -65,15 +65,15 @@
 	};
 
 	leds {
-		compatible = "gpio-leds";
-		pinctrl-names = "default";
-		pinctrl-0 = <&led_rgb_b>;
+		compatible = "pwm-leds";
 
-		led_rgb_b {
-			function = LED_FUNCTION_STATUS;
+		led-0 {
 			color = <LED_COLOR_ID_BLUE>;
-			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+			function = LED_FUNCTION_STATUS;
 			linux,default-trigger = "mmc1";
+			pwms = <&pwm0 0 1000000 0>;
+			max-brightness = <255>;
 		};
 	};
 
@@ -348,42 +348,41 @@
 			compatible = "usb-c-connector";
 			label = "USB-C";
 			data-role = "dual";
+
 			power-role = "dual";
 			try-power-role = "sink";
 			op-sink-microwatt = <1000000>;
 			sink-pdos =
-				<PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
-				 PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM)
-				 PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM)>;
+				<PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>,
+				<PDO_VAR(5000, 20000, 5000)>;
 			source-pdos =
 				<PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
 
-			/* Currently broken */
-			// ports {
-			// 	#address-cells = <1>;
-			// 	#size-cells = <0>;
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
 
-			// 	port@0 {
-			// 		reg = <0>;
-			// 		usbc0_role_sw: endpoint {
-			// 			remote-endpoint = <&dwc3_0_role_switch>;
-			// 		};
-			// 	};
+				port@0 {
+					reg = <0>;
+					usbc0_role_sw: endpoint {
+						remote-endpoint = <&dwc3_0_role_switch>;
+					};
+				};
 
-			// 	port@1 {
-			// 		reg = <1>;
-			// 		usbc0_orien_sw: endpoint {
-			// 			remote-endpoint = <&usbdp_phy0_orientation_switch>;
-			// 		};
-			// 	};
+				port@1 {
+					reg = <1>;
+					usbc0_orien_sw: endpoint {
+						remote-endpoint = <&usbdp_phy0_orientation_switch>;
+					};
+				};
 
-			// 	port@2 {
-			// 		reg = <2>;
-			// 		dp_altmode_mux: endpoint {
-			// 			remote-endpoint = <&usbdp_phy0_dp_altmode_mux>;
-			// 		};
-			// 	};
-			// };
+				port@2 {
+					reg = <2>;
+					dp_altmode_mux: endpoint {
+						remote-endpoint = <&usbdp_phy0_dp_altmode_mux>;
+					};
+				};
+			};
 		};
 	};
 };
@@ -533,12 +532,6 @@
 		};
 	};
 
-	leds {
-		led_rgb_b: led-rgb-b {
-			rockchip,pins = <0 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
 	sound {
 		hp_detect: hp-detect {
 			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
@@ -590,6 +583,10 @@
 			rockchip,pins = <3 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
+};
+
+&pwm0 {
+	status = "okay";
 };
 
 &pwm1 {
@@ -987,14 +984,14 @@
 	status = "okay";
 };
 
-/* Broken */
-// &u2phy0 {
-// 	status = "okay";
-// };
+&u2phy0 {
+	status = "okay";
+};
 
-// &u2phy0_otg {
-// 	status = "okay";
-// };
+&u2phy0_otg {
+	phy-supply = <&vbus5v0_typec>;
+	status = "okay";
+};
 
 &u2phy1 {
 	status = "okay";
@@ -1023,56 +1020,50 @@
 	status = "okay";
 };
 
+&usbdp_phy0 {
+	mode-switch;
+	orientation-switch;
+	sbu1-dc-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+	sbu2-dc-gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+
+	port {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		usbdp_phy0_orientation_switch: endpoint@0 {
+			reg = <0>;
+			remote-endpoint = <&usbc0_orien_sw>;
+		};
+
+		usbdp_phy0_dp_altmode_mux: endpoint@1 {
+			reg = <1>;
+			remote-endpoint = <&dp_altmode_mux>;
+		};
+	};
+};
+
 &usbdp_phy1 {
 	status = "okay";
 };
-
-/* Broken */
-// &usbdp_phy0 {
-// 	mode-switch;
-// 	orientation-switch;
-// 	sbu1-dc-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
-// 	sbu2-dc-gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_HIGH>;
-// 	status = "okay";
-
-// 	port {
-// 		#address-cells = <1>;
-// 		#size-cells = <0>;
-
-// 		usbdp_phy0_orientation_switch: endpoint@0 {
-// 			reg = <0>;
-// 			remote-endpoint = <&usbc0_orien_sw>;
-// 		};
-
-// 		usbdp_phy0_dp_altmode_mux: endpoint@1 {
-// 			reg = <1>;
-// 			remote-endpoint = <&dp_altmode_mux>;
-// 		};
-// 	};
-// };
 
 &usb_host0_ehci {
 	status = "okay";
 };
 
-&usb_host0_ohci {
+&usb_host0_xhci {
+	usb-role-switch;
 	status = "okay";
+
+	port {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		dwc3_0_role_switch: endpoint {
+			remote-endpoint = <&usbc0_role_sw>;
+		};
+	};
 };
-
-/* Broken */
-// &usb_host0_xhci {
-// 	usb-role-switch;
-// 	status = "okay";
-
-// 	port {
-// 		#address-cells = <1>;
-// 		#size-cells = <0>;
-
-// 		dwc3_0_role_switch: endpoint {
-// 			remote-endpoint = <&usbc0_role_sw>;
-// 		};
-// 	};
-// };
 
 &usb_host1_ehci {
 	status = "okay";
@@ -1091,11 +1082,11 @@
 	status = "okay";
 };
 
-&vop_mmu {
+&vop {
 	status = "okay";
 };
 
-&vop {
+&vop_mmu {
 	status = "okay";
 };
 
