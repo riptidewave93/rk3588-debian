@@ -4,9 +4,9 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rk3588-test branch at commit 038280aa](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/038280aa7665e698f6b6b55664c96717835fdeca)
-- Arm Trusted Firmware - [Mainline at commit 6ef685a](https://github.com/ARM-software/arm-trusted-firmware/tree/6ef685a913f990314ed5f8f68986476d373b119b)
-- Mainline U-Boot - [v2025.04-rc1](https://github.com/u-boot/u-boot/tree/v2025.04-rc1)
+- Linux Kernel - [Collabora's rk3588-test branch at commit e6efacc6](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/e6efacc63426f7cbad6122f14c9eb3e80fe67f46)
+- Arm Trusted Firmware - [Mainline at commit 74dd541](https://github.com/ARM-software/arm-trusted-firmware/tree/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2)
+- Mainline U-Boot - [v2025.04-rc2](https://github.com/u-boot/u-boot/tree/v2025.04-rc2)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 

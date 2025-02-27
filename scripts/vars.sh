@@ -16,8 +16,8 @@ toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
 toolchain_cross_compile="aarch64-none-linux-gnu-"
 
 # Arm Trusted Firmware
-atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/6ef685a913f990314ed5f8f68986476d373b119b.tar.gz"
-atf_filename="arm-trusted-firmware-6ef685a913f990314ed5f8f68986476d373b119b.tar.gz"
+atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2.tar.gz"
+atf_filename="arm-trusted-firmware-74dd541f91bfe5f10b88a0028dcfb0ff55b369b2.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
@@ -25,12 +25,12 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.04-rc1.zip"
-uboot_filename="u-boot-2025.04-rc1.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.04-rc2.zip"
+uboot_filename="u-boot-2025.04-rc2.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/038280aa7665e698f6b6b55664c96717835fdeca/linux-038280aa7665e698f6b6b55664c96717835fdeca.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/e6efacc63426f7cbad6122f14c9eb3e80fe67f46/linux-e6efacc63426f7cbad6122f14c9eb3e80fe67f46.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
