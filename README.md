@@ -7,6 +7,7 @@ Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at 
 - Linux Kernel - [Collabora's rk3588-test branch at commit e6efacc6](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/e6efacc63426f7cbad6122f14c9eb3e80fe67f46)
 - Arm Trusted Firmware - [Mainline at commit 74dd541](https://github.com/ARM-software/arm-trusted-firmware/tree/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2)
 - Mainline U-Boot - [v2025.04-rc2](https://github.com/u-boot/u-boot/tree/v2025.04-rc2)
+- OP-TEE OS - [master at commit 854b7c3](https://github.com/OP-TEE/optee_os/tree/4.5.0)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 

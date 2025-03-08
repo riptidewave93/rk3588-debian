@@ -9,11 +9,12 @@ uboot_builddir=$(mktemp -d)
 unzip -q ${root_path}/downloads/${uboot_filename} -d ${uboot_builddir}
 
 # Exports baby
-export PATH=${build_path}/toolchain/${toolchain_bin_path}:${PATH}
+export PATH=${build_path}/64toolchain/${toolchain64_bin_path}:${PATH}
 export GCC_COLORS=auto
-export CROSS_COMPILE=${toolchain_cross_compile}
+export CROSS_COMPILE=${toolchain64_cross_compile}
 export ARCH=arm64
 export BL31=${build_path}/atf/bl31.bin
+export TEE=${build_path}/optee/tee.bin
 
 # Stupid TPL has to be prebuilt
 export ROCKCHIP_TPL=${root_path}/downloads/${tpl_filename}

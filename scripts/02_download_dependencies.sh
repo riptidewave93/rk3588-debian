@@ -12,10 +12,22 @@ if [ ! -d ${root_path}/downloads ]; then
     mkdir ${root_path}/downloads
 fi
 
-# Toolchain
-if [ ! -f ${root_path}/downloads/${toolchain_filename} ]; then
-    debug_msg "Downloading toolchain..."
-    wget ${toolchain_url} -P ${root_path}/downloads
+# 64bit Toolchain
+if [ ! -f ${root_path}/downloads/${toolchain64_filename} ]; then
+    debug_msg "Downloading 64bit toolchain..."
+    wget ${toolchain64_url} -P ${root_path}/downloads
+fi
+
+# 32bit Toolchain
+if [ ! -f ${root_path}/downloads/${toolchain32_filename} ]; then
+    debug_msg "Downloading 32bit toolchain..."
+    wget ${toolchain32_url} -P ${root_path}/downloads
+fi
+
+# OPTEE
+if [ ! -f ${root_path}/downloads/${optee_filename} ]; then
+    debug_msg "Downloading OP-TEE OS..."
+    wget ${optee_src} -O ${root_path}/downloads/${optee_filename}
 fi
 
 # ATF

@@ -36,6 +36,7 @@ RUN dpkg --add-architecture arm64 \
     mtools \
     parted \
     pkg-config \
+    python3-cryptography \
     python3-dev \
     python3-pyelftools \
     python3-setuptools \

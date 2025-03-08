@@ -8,10 +8,20 @@ scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 debug_msg "Starting 03_docker.sh"
 
 # Start with things we can do now
-if [ ! -d ${build_path}/toolchain ]; then
-    debug_msg "Setting up the toolchain for docker..."
-    mkdir -p ${build_path}/toolchain
-    tar -xf ${root_path}/downloads/${toolchain_filename} -C ${build_path}/toolchain
+if [ ! -d ${build_path}/64toolchain ]; then
+    debug_msg "Setting up the 64bit toolchain for docker..."
+    mkdir -p ${build_path}/64toolchain
+    tar -xf ${root_path}/downloads/${toolchain64_filename} -C ${build_path}/64toolchain
+fi
+if [ ! -d ${build_path}/32toolchain ]; then
+    debug_msg "Setting up the 32bit toolchain for docker..."
+    mkdir -p ${build_path}/32toolchain
+    tar -xf ${root_path}/downloads/${toolchain32_filename} -C ${build_path}/32toolchain
+fi
+
+if [ ! -f ${build_path}/optee/tee.bin ]; then
+    debug_msg "Docker: Building OP-TEE..."
+    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -it ${docker_tag} /repo/scripts/docker/build_optee.sh
 fi
 
 if [ ! -f ${build_path}/atf/bl31.bin ]; then

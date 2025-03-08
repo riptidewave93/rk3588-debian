@@ -9,11 +9,22 @@ docker_tag=rk3588-builder:builder
 # Supported Devices
 supported_devices=(rk3588-quartzpro64 rk3588s-rock-5a rk3588-rock-5b-plus)
 
-# Toolchain
-toolchain_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
-toolchain_filename="$(basename ${toolchain_url})"
-toolchain_bin_path="${toolchain_filename%.tar.xz}/bin"
-toolchain_cross_compile="aarch64-none-linux-gnu-"
+# 64bit Toolchain
+toolchain64_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
+toolchain64_filename="$(basename ${toolchain64_url})"
+toolchain64_bin_path="${toolchain64_filename%.tar.xz}/bin"
+toolchain64_cross_compile="aarch64-none-linux-gnu-"
+
+# 32bit Toolchain
+toolchain32_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz"
+toolchain32_filename="$(basename ${toolchain32_url})"
+toolchain32_bin_path="${toolchain32_filename%.tar.xz}/bin"
+toolchain32_cross_compile="arm-none-linux-gnueabihf-"
+
+# OP-TEE OS
+optee_src="https://github.com/OP-TEE/optee_os/archive/854b7c3b1290b244ec589455c10f984af2bf7046.zip"
+optee_filename="optee_os-854b7c3b1290b244ec589455c10f984af2bf7046.zip"
+optee_overlay_dir="optee"
 
 # Arm Trusted Firmware
 atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2.tar.gz"
