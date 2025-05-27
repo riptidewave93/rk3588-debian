@@ -4,10 +4,10 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rk3588-test branch at commit e6efacc6](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/e6efacc63426f7cbad6122f14c9eb3e80fe67f46)
-- Arm Trusted Firmware - [Mainline at commit 74dd541](https://github.com/ARM-software/arm-trusted-firmware/tree/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2)
-- Mainline U-Boot - [v2025.04-rc2](https://github.com/u-boot/u-boot/tree/v2025.04-rc2)
-- OP-TEE OS - [master at commit 854b7c3](https://github.com/OP-TEE/optee_os/tree/4.5.0)
+- Linux Kernel - [Collabora's rockchip-devel branch at commit b98c0431](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/b98c04318a599972aefac1cf5922777b611dc2a9)
+- Arm Trusted Firmware - [Mainline at commit b68861c](https://github.com/ARM-software/arm-trusted-firmware/tree/b68861c7298d981545f89bb95a468c23420b49bb)
+- Mainline U-Boot - [v2025.07-rc3](https://github.com/u-boot/u-boot/tree/v2025.07-rc3)
+- OP-TEE OS - [master at commit b63e12e](https://github.com/OP-TEE/optee_os/tree/b63e12e4bacb9d35002839c7e837e3372d84d813)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 
@@ -65,7 +65,6 @@ Note that if you want to manually flash the .uboot image to update an existing i
 ## To Do
 * All Boards
   * HDM1 does not work
-  * No NPU support (should be ready soon)
 * Board Specific
   * QuartzPro64
     * USB3 does not work

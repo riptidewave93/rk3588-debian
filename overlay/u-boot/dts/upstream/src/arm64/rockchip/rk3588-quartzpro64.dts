@@ -9,7 +9,6 @@
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
 #include <dt-bindings/pinctrl/rockchip.h>
-#include <dt-bindings/soc/rockchip,vop2.h>
 #include <dt-bindings/usb/pd.h>
 #include "rk3588.dtsi"
 
@@ -83,17 +82,6 @@
 		compatible = "simple-audio-amplifier";
 		enable-gpios = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
 		sound-name-prefix = "Speaker Amp";
-	};
-
-	hdmi0-con {
-		compatible = "hdmi-connector";
-		type = "a";
-
-		port {
-			hdmi0_con_in: endpoint {
-				remote-endpoint = <&hdmi0_out_con>;
-			};
-		};
 	};
 
 	leds {
@@ -185,8 +173,6 @@
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpios = <&gpio3 RK_PC3 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&vcc3v3_pcie30_en>;
 		regulator-name = "vcc3v3_pcie30";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
@@ -197,8 +183,6 @@
 	vcc3v3_wf: regulator-vcc3v3-wf {
 		compatible = "regulator-fixed";
 		enable-active-high;
-		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_pwren>;
 		gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
 		regulator-name = "vcc3v3_wf";
 		regulator-min-microvolt = <3300000>;
@@ -307,38 +291,6 @@
 	status = "okay";
 };
 
-&hdmi0 {
-	status = "okay";
-};
-
-&hdmi0_in {
-	hdmi0_in_vp0: endpoint {
-		remote-endpoint = <&vp0_out_hdmi0>;
-	};
-};
-
-&hdmi0_out {
-	hdmi0_out_con: endpoint {
-		remote-endpoint = <&hdmi0_con_in>;
-	};
-};
-
-&hdmi_receiver_cma {
-	status = "okay";
-};
-
-&hdmi_receiver {
-	status = "okay";
-	hpd-gpios = <&gpio2 RK_PB5 GPIO_ACTIVE_LOW>;
-	pinctrl-0 = <&hdmim1_rx_cec &hdmim1_rx_hpdin &hdmim1_rx_scl &hdmim1_rx_sda &hdmirx_hpd>;
-	pinctrl-names = "default";
-	memory-region = <&hdmi_receiver_cma>;
-};
-
-&hdptxphy_hdmi0 {
-	status = "okay";
-};
-
 &i2c2 {
 	status = "okay";
 
@@ -359,7 +311,7 @@
 	status = "okay";
 
 	es8388: audio-codec@11 {
-		compatible = "everest,es8388";
+		compatible = "everest,es8388", "everest,es8328";
 		reg = <0x11>;
 		assigned-clocks = <&cru I2S0_8CH_MCLKOUT>;
 		assigned-clock-rates = <12288000>;
@@ -400,12 +352,6 @@
 };
 
 &pinctrl {
-	hdmirx {
-		hdmirx_hpd: hdmirx-5v-detection {
-			rockchip,pins = <2 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
-
 	hym8563 {
 		hym8563_int: hym8563-int {
 			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>;
@@ -533,6 +479,36 @@
 	pinctrl-0 = <&pcie3_reset>;
 	reset-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_pcie30>;
+	status = "okay";
+};
+
+&rknn_core_top {
+	npu-supply = <&vdd_npu_s0>;
+	sram-supply = <&vdd_npu_mem_s0>;
+	status = "okay";
+};
+
+&rknn_core_1 {
+	npu-supply = <&vdd_npu_s0>;
+	sram-supply = <&vdd_npu_mem_s0>;
+	status = "okay";
+};
+
+&rknn_core_2 {
+	npu-supply = <&vdd_npu_s0>;
+	sram-supply = <&vdd_npu_mem_s0>;
+	status = "okay";
+};
+
+&rknn_mmu_top {
+	status = "okay";
+};
+
+&rknn_mmu_1 {
+	status = "okay";
+};
+
+&rknn_mmu_2 {
 	status = "okay";
 };
 
@@ -1285,19 +1261,4 @@
 
 &usb_host1_ohci {
 	status = "okay";
-};
-
-&vop_mmu {
-	status = "okay";
-};
-
-&vop {
-	status = "okay";
-};
-
-&vp0 {
-	vp0_out_hdmi0: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
-		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
-		remote-endpoint = <&hdmi0_in_vp0>;
-	};
 };

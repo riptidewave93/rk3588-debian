@@ -20,8 +20,10 @@ export CFG_ENABLE_EMBEDDED_TESTS=y
 export CFG_VIRTUALIZATION=y
 export CFG_CORE_DYN_SHM=y
 export CFG_CORE_RESERVED_SHM=n
-export CFG_DRAM_BASE=0x60000000
-export CFG_DRAM_SIZE=0x20000000 # 1GB
+#export CFG_DRAM_BASE=0x60000000
+#export CFG_DRAM_SIZE=0x20000000 # 512MB
+export CFG_DRAM_BASE=0x10000000
+export CFG_DRAM_SIZE=0x40000000 # 1GB
 
 # Here we go
 cd ${optee_builddir}/${optee_filename%.zip}

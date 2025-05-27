@@ -22,13 +22,13 @@ toolchain32_bin_path="${toolchain32_filename%.tar.xz}/bin"
 toolchain32_cross_compile="arm-none-linux-gnueabihf-"
 
 # OP-TEE OS
-optee_src="https://github.com/OP-TEE/optee_os/archive/854b7c3b1290b244ec589455c10f984af2bf7046.zip"
-optee_filename="optee_os-854b7c3b1290b244ec589455c10f984af2bf7046.zip"
+optee_src="https://github.com/OP-TEE/optee_os/archive/b63e12e4bacb9d35002839c7e837e3372d84d813.zip"
+optee_filename="optee_os-b63e12e4bacb9d35002839c7e837e3372d84d813.zip"
 optee_overlay_dir="optee"
 
 # Arm Trusted Firmware
-atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/74dd541f91bfe5f10b88a0028dcfb0ff55b369b2.tar.gz"
-atf_filename="arm-trusted-firmware-74dd541f91bfe5f10b88a0028dcfb0ff55b369b2.tar.gz"
+atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
+atf_filename="arm-trusted-firmware-b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
@@ -36,19 +36,19 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.04-rc2.zip"
-uboot_filename="u-boot-2025.04-rc2.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.07-rc3.zip"
+uboot_filename="u-boot-2025.07-rc3.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/e6efacc63426f7cbad6122f14c9eb3e80fe67f46/linux-e6efacc63426f7cbad6122f14c9eb3e80fe67f46.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/d11b3c9daf21d70b24dfbb4ab69b95540d9eb90d/linux-d11b3c9daf21d70b24dfbb4ab69b95540d9eb90d.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
 
 # Distro
 distrib_name="debian"
-deb_mirror="http://ftp.us.debian.org/debian"
+deb_mirror="https://deb.debian.org/debian" 
 deb_release="bookworm"
 deb_arch="arm64"
 fs_overlay_dir="filesystem"

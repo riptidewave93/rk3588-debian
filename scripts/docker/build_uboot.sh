@@ -43,7 +43,7 @@ for board in "${supported_devices[@]}"; do
     cfg+="_defconfig"
     make distclean
     make ${cfg}
-    make -j`getconf _NPROCESSORS_ONLN`
+    make -j`getconf _NPROCESSORS_ONLN` #|| (/bin/bash -i; exit 1)
 
     # Save the config
     make savedefconfig

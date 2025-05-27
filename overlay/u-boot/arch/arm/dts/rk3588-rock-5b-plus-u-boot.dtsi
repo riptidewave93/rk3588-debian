@@ -8,7 +8,7 @@
 
 / {
 	leds {
-		led-0 {
+		led_rgb_b {
 			default-state = "on";
 		};
 	};
@@ -55,6 +55,6 @@
 };
 
 /* Power our M.2 3.3v + PCIe clock generator */
-&vcc3v3_pi6c_05 {
+&vcc3v3_pcie30 {
 	regulator-always-on;
 };
