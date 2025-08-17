@@ -6,6 +6,7 @@ RUN mkdir /repo
 RUN dpkg --add-architecture arm64 \
     && apt-get update \
     && apt-get install -yq \
+    acpica-tools \
     autoconf \
     bc \
     binfmt-support \
@@ -20,6 +21,8 @@ RUN dpkg --add-architecture arm64 \
     dwarves \
     fakeroot \
     flex \
+    gcc \
+    g++ \
     gcc-aarch64-linux-gnu \
     genext2fs \
     git \
@@ -27,6 +30,7 @@ RUN dpkg --add-architecture arm64 \
     kpartx \
     libconfuse-common \
     libconfuse-dev \
+    libdw-dev \
     libelf-dev \
     libgnutls28-dev \
     libncurses-dev \
@@ -49,6 +53,7 @@ RUN dpkg --add-architecture arm64 \
     wget \
     xz-utils \
     zstd \
+    && ln -sfn /usr/share/debootstrap/scripts/gutsy /usr/share/debootstrap/scripts/noble \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

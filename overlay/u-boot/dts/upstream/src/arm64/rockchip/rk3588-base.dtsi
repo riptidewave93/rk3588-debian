@@ -96,8 +96,6 @@
 			enable-method = "psci";
 			capacity-dmips-mhz = <530>;
 			clocks = <&scmi_clk SCMI_CLK_CPUL>;
-			assigned-clocks = <&scmi_clk SCMI_CLK_CPUL>;
-			assigned-clock-rates = <816000000>;
 			cpu-idle-states = <&CPU_SLEEP>;
 			i-cache-size = <32768>;
 			i-cache-line-size = <64>;
@@ -174,8 +172,6 @@
 			enable-method = "psci";
 			capacity-dmips-mhz = <1024>;
 			clocks = <&scmi_clk SCMI_CLK_CPUB01>;
-			assigned-clocks = <&scmi_clk SCMI_CLK_CPUB01>;
-			assigned-clock-rates = <816000000>;
 			cpu-idle-states = <&CPU_SLEEP>;
 			i-cache-size = <65536>;
 			i-cache-line-size = <64>;
@@ -214,8 +210,6 @@
 			enable-method = "psci";
 			capacity-dmips-mhz = <1024>;
 			clocks = <&scmi_clk SCMI_CLK_CPUB23>;
-			assigned-clocks = <&scmi_clk SCMI_CLK_CPUB23>;
-			assigned-clock-rates = <816000000>;
 			cpu-idle-states = <&CPU_SLEEP>;
 			i-cache-size = <65536>;
 			i-cache-line-size = <64>;
@@ -440,16 +434,15 @@
 		#clock-cells = <0>;
 	};
 
-	pmu_sram: sram@10f000 {
-		compatible = "mmio-sram";
-		reg = <0x0 0x0010f000 0x0 0x100>;
-		ranges = <0 0x0 0x0010f000 0x100>;
-		#address-cells = <1>;
-		#size-cells = <1>;
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
 
-		scmi_shmem: sram@0 {
+		scmi_shmem: shmem@10f000 {
 			compatible = "arm,scmi-shmem";
-			reg = <0x0 0x100>;
+			reg = <0x0 0x0010f000 0x0 0x100>;
+			no-map;
 		};
 	};
 
@@ -1147,23 +1140,26 @@
 		};
 	};
 
-	rknn_core_top: npu-core@fdab0000 {
-		compatible = "rockchip,rk3588-rknn-core-top", "rockchip,rknn-core-top";
-		reg = <0x0 0xfdab0000 0x0 0x9000>;
+	rknn_core_0: npu@fdab0000 {
+		compatible = "rockchip,rk3588-rknn-core";
+		reg = <0x0 0xfdab0000 0x0 0x1000>,
+		      <0x0 0xfdab1000 0x0 0x1000>,
+		      <0x0 0xfdab3000 0x0 0x1000>;
+		reg-names = "pc", "cna", "core";
 		interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH 0>;
-		clocks = <&scmi_clk SCMI_CLK_NPU>, <&cru PCLK_NPU_ROOT>,
-			 <&cru ACLK_NPU0>, <&cru HCLK_NPU0>;
+		clocks = <&cru ACLK_NPU0>, <&cru HCLK_NPU0>,
+			 <&scmi_clk SCMI_CLK_NPU>, <&cru PCLK_NPU_ROOT>;
 		clock-names = "aclk", "hclk", "npu", "pclk";
 		assigned-clocks = <&scmi_clk SCMI_CLK_NPU>;
 		assigned-clock-rates = <200000000>;
 		resets = <&cru SRST_A_RKNN0>, <&cru SRST_H_RKNN0>;
 		reset-names = "srst_a", "srst_h";
 		power-domains = <&power RK3588_PD_NPUTOP>;
-		iommus = <&rknn_mmu_top>;
+		iommus = <&rknn_mmu_0>;
 		status = "disabled";
 	};
 
-	rknn_mmu_top: iommu@fdab9000 {
+	rknn_mmu_0: iommu@fdab9000 {
 		compatible = "rockchip,rk3588-iommu", "rockchip,rk3568-iommu";
 		reg = <0x0 0xfdab9000 0x0 0x100>,
 		      <0x0 0xfdaba000 0x0 0x100>;
@@ -1175,12 +1171,18 @@
 		status = "disabled";
 	};
 
-	rknn_core_1: npu-core@fdac0000 {
-		compatible = "rockchip,rk3588-rknn-core", "rockchip,rknn-core";
-		reg = <0x0 0xfdac0000 0x0 0x9000>;
+	rknn_core_1: npu@fdac0000 {
+		compatible = "rockchip,rk3588-rknn-core";
+		reg = <0x0 0xfdac0000 0x0 0x1000>,
+		      <0x0 0xfdac1000 0x0 0x1000>,
+		      <0x0 0xfdac3000 0x0 0x1000>;
+		reg-names = "pc", "cna", "core";
 		interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH 0>;
-		clocks = <&cru ACLK_NPU1>, <&cru HCLK_NPU1>;
-		clock-names = "aclk", "hclk";
+		clocks = <&cru ACLK_NPU1>, <&cru HCLK_NPU1>,
+			 <&scmi_clk SCMI_CLK_NPU>, <&cru PCLK_NPU_ROOT>;
+		clock-names = "aclk", "hclk", "npu", "pclk";
+		assigned-clocks = <&scmi_clk SCMI_CLK_NPU>;
+		assigned-clock-rates = <200000000>;
 		resets = <&cru SRST_A_RKNN1>, <&cru SRST_H_RKNN1>;
 		reset-names = "srst_a", "srst_h";
 		power-domains = <&power RK3588_PD_NPU1>;
@@ -1199,12 +1201,18 @@
 		status = "disabled";
 	};
 
-	rknn_core_2: npu-core@fdad0000 {
-		compatible = "rockchip,rk3588-rknn-core", "rockchip,rknn-core";
-		reg = <0x0 0xfdad0000 0x0 0x9000>;
+	rknn_core_2: npu@fdad0000 {
+		compatible = "rockchip,rk3588-rknn-core";
+		reg = <0x0 0xfdad0000 0x0 0x1000>,
+		      <0x0 0xfdad1000 0x0 0x1000>,
+		      <0x0 0xfdad3000 0x0 0x1000>;
+		reg-names = "pc", "cna", "core";
 		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH 0>;
-		clocks = <&cru ACLK_NPU2>, <&cru HCLK_NPU2>;
-		clock-names = "aclk", "hclk";
+		clocks = <&cru ACLK_NPU2>, <&cru HCLK_NPU2>,
+			 <&scmi_clk SCMI_CLK_NPU>, <&cru PCLK_NPU_ROOT>;
+		clock-names = "aclk", "hclk", "npu", "pclk";
+		assigned-clocks = <&scmi_clk SCMI_CLK_NPU>;
+		assigned-clock-rates = <200000000>;
 		resets = <&cru SRST_A_RKNN2>, <&cru SRST_H_RKNN2>;
 		reset-names = "srst_a", "srst_h";
 		power-domains = <&power RK3588_PD_NPU2>;
@@ -1335,44 +1343,6 @@
 		#iommu-cells = <0>;
 	};
 
-	vdec0: video-decoder@fdc38000 {
-		compatible = "rockchip,rk3588-vdec";
-		reg = <0x0 0xfdc38000 0x0 0x100>, <0x0 0xfdc38100 0x0 0x500>, <0x0 0xfdc38600 0x0 0x100>;
-		reg-names = "link", "function", "cache";
-		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH 0>;
-		clocks = <&cru ACLK_RKVDEC0>, <&cru HCLK_RKVDEC0>, <&cru CLK_RKVDEC0_CA>,
-			 <&cru CLK_RKVDEC0_CORE>, <&cru CLK_RKVDEC0_HEVC_CA>;
-		clock-names = "axi", "ahb", "cabac", "core", "hevc_cabac";
-		assigned-clocks = <&cru ACLK_RKVDEC0>, <&cru CLK_RKVDEC0_CORE>,
-				  <&cru CLK_RKVDEC0_CA>, <&cru CLK_RKVDEC0_HEVC_CA>;
-		assigned-clock-rates = <800000000>, <600000000>,
-				       <600000000>, <1000000000>;
-		resets = <&cru SRST_A_RKVDEC0>, <&cru SRST_H_RKVDEC0>, <&cru SRST_RKVDEC0_CA>,
-			 <&cru SRST_RKVDEC0_CORE>, <&cru SRST_RKVDEC0_HEVC_CA>;
-		reset-names = "axi", "ahb", "cabac", "core", "hevc_cabac";
-		power-domains = <&power RK3588_PD_RKVDEC0>;
-		sram = <&vdec0_sram>;
-	};
-
-	vdec1: video-decoder@fdc40000 {
-		compatible = "rockchip,rk3588-vdec";
-		reg = <0x0 0xfdc40000 0x0 0x100>, <0x0 0xfdc40100 0x0 0x500>, <0x0 0xfdc40600 0x0 0x100>;
-		reg-names = "link", "function", "cache";
-		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH 0>;
-		clocks = <&cru ACLK_RKVDEC1>, <&cru HCLK_RKVDEC1>, <&cru CLK_RKVDEC1_CA>,
-			 <&cru CLK_RKVDEC1_CORE>, <&cru CLK_RKVDEC1_HEVC_CA>;
-		clock-names = "axi", "ahb", "cabac", "core", "hevc_cabac";
-		assigned-clocks = <&cru ACLK_RKVDEC1>, <&cru CLK_RKVDEC1_CORE>,
-				  <&cru CLK_RKVDEC1_CA>, <&cru CLK_RKVDEC1_HEVC_CA>;
-		assigned-clock-rates = <800000000>, <600000000>,
-				       <600000000>, <1000000000>;
-		resets = <&cru SRST_A_RKVDEC1>, <&cru SRST_H_RKVDEC1>, <&cru SRST_RKVDEC1_CA>,
-			 <&cru SRST_RKVDEC1_CORE>, <&cru SRST_RKVDEC1_HEVC_CA>;
-		reset-names = "axi", "ahb", "cabac", "core", "hevc_cabac";
-		power-domains = <&power RK3588_PD_RKVDEC1>;
-		sram = <&vdec1_sram>;
-	};
-
 	av1d: video-codec@fdc70000 {
 		compatible = "rockchip,rk3588-av1-vpu";
 		reg = <0x0 0xfdc70000 0x0 0x800>;
@@ -1391,6 +1361,8 @@
 		reg = <0x0 0xfdd90000 0x0 0x4200>, <0x0 0xfdd95000 0x0 0x1000>;
 		reg-names = "vop", "gamma-lut";
 		interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH 0>;
+		assigned-clocks = <&cru ACLK_VOP>;
+		assigned-clock-rates = <750000000>;
 		clocks = <&cru ACLK_VOP>,
 			 <&cru HCLK_VOP>,
 			 <&cru DCLK_VOP0>,
@@ -1672,6 +1644,34 @@
 			};
 
 			hdmi0_out: port@1 {
+				reg = <1>;
+			};
+		};
+	};
+
+	edp0: edp@fdec0000 {
+		compatible = "rockchip,rk3588-edp";
+		reg = <0x0 0xfdec0000 0x0 0x1000>;
+		clocks = <&cru CLK_EDP0_24M>, <&cru PCLK_EDP0>;
+		clock-names = "dp", "pclk";
+		interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH 0>;
+		phys = <&hdptxphy0>;
+		phy-names = "dp";
+		power-domains = <&power RK3588_PD_VO1>;
+		resets = <&cru SRST_EDP0_24M>, <&cru SRST_P_EDP0>;
+		reset-names = "dp", "apb";
+		rockchip,grf = <&vo1_grf>;
+		status = "disabled";
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			edp0_in: port@0 {
+				reg = <0>;
+			};
+
+			edp0_out: port@1 {
 				reg = <1>;
 			};
 		};
@@ -3228,16 +3228,6 @@
 		ranges = <0x0 0x0 0xff001000 0xef000>;
 		#address-cells = <1>;
 		#size-cells = <1>;
-
-		vdec0_sram: codec-sram@0 {
-			reg = <0x0 0x78000>;
-			pool;
-		};
-
-		vdec1_sram: codec-sram@78000 {
-			reg = <0x78000 0x77000>;
-			pool;
-		};
 	};
 
 	pinctrl: pinctrl {

@@ -22,13 +22,15 @@ toolchain32_bin_path="${toolchain32_filename%.tar.xz}/bin"
 toolchain32_cross_compile="arm-none-linux-gnueabihf-"
 
 # OP-TEE OS
-optee_src="https://github.com/OP-TEE/optee_os/archive/b63e12e4bacb9d35002839c7e837e3372d84d813.zip"
-optee_filename="optee_os-b63e12e4bacb9d35002839c7e837e3372d84d813.zip"
+optee_src="https://github.com/OP-TEE/optee_os/archive/6dfa501fae923f444358fa337febf16932fc63a1.zip"
+optee_filename="optee_os-6dfa501fae923f444358fa337febf16932fc63a1.zip"
 optee_overlay_dir="optee"
 
 # Arm Trusted Firmware
-atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
-atf_filename="arm-trusted-firmware-b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
+#atf_src="https://github.com/ARM-software/arm-trusted-firmware/archive/b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
+#atf_filename="arm-trusted-firmware-b68861c7298d981545f89bb95a468c23420b49bb.tar.gz"
+atf_src="https://github.com/worproject/arm-trusted-firmware/archive/d5c68fd928586f4152a3402dfdd9a6ae6e39e392.tar.gz"
+atf_filename="arm-trusted-firmware-d5c68fd928586f4152a3402dfdd9a6ae6e39e392.tar.gz"
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
@@ -36,27 +38,41 @@ tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
-uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.07-rc3.zip"
-uboot_filename="u-boot-2025.07-rc3.zip"
+uboot_src="https://github.com/u-boot/u-boot/archive/refs/tags/v2025.07.zip"
+uboot_filename="u-boot-2025.07.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/d11b3c9daf21d70b24dfbb4ab69b95540d9eb90d/linux-d11b3c9daf21d70b24dfbb4ab69b95540d9eb90d.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/2826d9e89111608cf24511742f37d6654381ec2f/linux-2826d9e89111608cf24511742f37d6654381ec2f.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
-
-# Distro
-distrib_name="debian"
-deb_mirror="https://deb.debian.org/debian" 
-deb_release="bookworm"
-deb_arch="arm64"
-fs_overlay_dir="filesystem"
 
 # Set BOOTLOADER_ONLY based on a flag file
 if [ -f "${build_path}/.bootloader-only" ]; then
     BOOTLOADER_ONLY=true
 fi
+
+# Set BOOTLOADER_ONLY based on a flag file
+if [ -f "${build_path}/.distro" ]; then
+    DISTRO=$(cat "${build_path}/.distro")
+fi
+
+# Distro
+if [ "${DISTRO}" == "ubuntu" ]; then
+    distrib_name="ubuntu"
+    deb_mirror="https://ports.ubuntu.com/ubuntu-ports" 
+    deb_release="noble"
+    deb_args=""
+else
+    # Default to debian
+    distrib_name="debian"
+    deb_mirror="https://deb.debian.org/debian" 
+    deb_release="bookworm"
+    deb_args="--include=apt-transport-https"
+fi
+deb_arch="arm64"
+fs_overlay_dir="filesystem"
 
 debug_msg () {
     BLU='\033[0;32m'

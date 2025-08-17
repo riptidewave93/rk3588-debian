@@ -20,7 +20,7 @@ disk_loop_dev=$(losetup -f -P --show ${build_path}/disk.img)
 
 # Now format our partitions since were mounted as a loop device
 mkfs.fat -F 32 -n EFI ${disk_loop_dev}p2
-mkfs.ext4 -L Debian ${disk_loop_dev}p3
+mkfs.ext4 -L ${distrib_name} ${disk_loop_dev}p3
 
 # Setup mounts!
 mkdir -p ${build_path}/rootfs
@@ -30,9 +30,26 @@ mount -t vfat ${disk_loop_dev}p2 ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs
-debootstrap --no-check-gpg --foreign --arch=${deb_arch} --include=apt-transport-https ${deb_release} ${build_path}/rootfs ${deb_mirror}
+debootstrap --no-check-gpg --foreign --arch=${deb_arch} ${deb_args} ${deb_release} ${build_path}/rootfs ${deb_mirror}
 cp /usr/bin/qemu-aarch64-static usr/bin/
 chroot ${build_path}/rootfs /debootstrap/debootstrap --second-stage
+
+# Apply our apt mirror settings
+if [ "${distrib_name}" == "debian" ]; then
+	echo """deb ${deb_mirror} ${deb_release} main contrib non-free-firmware
+deb-src ${deb_mirror} ${deb_release} main contrib non-free-firmware
+deb ${deb_mirror} ${deb_release}-updates main contrib non-free-firmware
+deb-src ${deb_mirror} ${deb_release}-updates main contrib non-free-firmware
+deb https://security.debian.org/debian-security ${deb_release}-security main
+deb-src https://security.debian.org/debian-security ${deb_release}-security main""" > ${build_path}/rootfs/etc/apt/sources.list
+elif [ "${distrib_name}" == "ubuntu" ]; then
+	echo """deb ${deb_mirror} ${deb_release} main restricted universe multiverse
+deb-src ${deb_mirror} ${deb_release} main restricted universe multiverse
+deb ${deb_mirror} ${deb_release}-updates main restricted universe multiverse
+deb-src ${deb_mirror} ${deb_release}-updates main restricted universe multiverse
+deb ${deb_mirror} ${deb_release}-security main restricted universe multiverse
+deb-src ${deb_mirror} ${deb_release}-security main restricted universe multiverse""" > ${build_path}/rootfs/etc/apt/sources.list
+fi
 
 # Copy over our overlay if we have one
 if [[ -d ${root_path}/overlay/${fs_overlay_dir}/ ]]; then

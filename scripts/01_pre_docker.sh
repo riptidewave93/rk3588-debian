@@ -14,6 +14,11 @@ else
     mkdir "${build_path}"
 fi
 
+# If DISTRO is set, save it
+if [[ -n "${DISTRO}" ]]; then
+    echo -n "${DISTRO}" > "${build_path}/.distro"
+fi
+
 # Always build to pickup changes/updates/improvements
 debug_msg "Building ${docker_tag}"
 docker build -t ${docker_tag} "${root_path}"

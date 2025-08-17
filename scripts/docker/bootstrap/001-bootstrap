@@ -23,13 +23,18 @@ apt-get -o Dpkg::Options::="--force-confold" -y --allow-downgrades \
     --allow-remove-essential --allow-change-held-packages install cloud-init \
     bsdextrautils git binutils ca-certificates e2fsprogs haveged parted curl \
     locales console-common openssh-server less vim net-tools wireguard-tools \
-    ntpsec u-boot-tools wget initramfs-tools network-manager grub-efi
+    ntpsec u-boot-tools wget initramfs-tools grub-efi
 
 # Locale gen
 locale-gen
 
 # Install packages for wifi
-apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regdb firmware-realtek bluez bluez-tools
+. /etc/os-release
+if [ "${ID}" == "debian" ]; then
+    apt-get install -y wireless-tools wpasupplicant firmware-brcm80211 wireless-regdb firmware-realtek bluez bluez-tools
+elif [ "${ID}" == "ubuntu" ]; then
+    apt-get install -y wireless-tools wpasupplicant wireless-regdb bluez bluez-tools linux-firmware
+fi
 
 # Add our GPU firmware
 mkdir -p /lib/firmware/arm/mali/arch10.8
@@ -44,13 +49,17 @@ wget -O /lib/firmware/brcm/brcmfmac43752-pcie.txt "https://github.com/armbian/fi
 update-initramfs -u -k ${KERN_VERSION}
 
 # Install grub
-grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=debian --recheck --no-nvram --removable
-update-grub
+echo "GRUB_DISABLE_OS_PROBER=true" >> /etc/default/grub
+if [ "${ID}" == "debian" ]; then
+    grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=${ID} --recheck --no-nvram --removable
+    update-grub
+elif [ "${ID}" == "ubuntu" ]; then
+    grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=${ID} --recheck --no-nvram
+    update-grub
+fi
 
-# Disable systemd-networkd, we use nmcli AKA NetworkManager
-systemctl disable systemd-networkd
+# Disable systemd-networkd-wait-online, it sucks
 systemctl disable systemd-networkd-wait-online
-systemctl mask systemd-networkd
 systemctl mask systemd-networkd-wait-online
 
 # Cleanup stuff we don't want floating around

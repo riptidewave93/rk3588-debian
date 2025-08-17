@@ -17,7 +17,7 @@ if [ -z "${BOOTLOADER_ONLY}" ]; then
         mkpart EFI fat32 16384KiB 528MiB \
         set 2 boot on \
         set 2 esp on \
-        mkpart Debian ext4 554MB 100%
+        mkpart ${distrib_name} ext4 554MB 100%
 fi
 
 # Also generate our bootloader disk image for those who run thier own OS
