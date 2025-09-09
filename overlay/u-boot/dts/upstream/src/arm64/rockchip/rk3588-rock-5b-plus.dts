@@ -110,10 +110,6 @@
 	};
 };
 
-&usbc0 {
-	status = "okay";
-};
-
 &usbdp_phy0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&usbc_sbu_dc>;

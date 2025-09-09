@@ -43,7 +43,7 @@ uboot_filename="u-boot-2025.07.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/2826d9e89111608cf24511742f37d6654381ec2f/linux-2826d9e89111608cf24511742f37d6654381ec2f.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/6fa8dc5d46572f6a1a6ebca807fbfa5688a475e4/linux-6fa8dc5d46572f6a1a6ebca807fbfa5688a475e4.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
