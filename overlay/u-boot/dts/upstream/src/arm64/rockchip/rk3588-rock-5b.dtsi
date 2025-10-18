@@ -28,8 +28,8 @@
 		pinctrl-0 = <&led_rgb_b>;
 
 		led_rgb_b {
-			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_SD;
+			color = <LED_COLOR_ID_BLUE>;
 			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
 			linux,default-trigger = "mmc1";
 		};

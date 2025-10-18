@@ -32,6 +32,7 @@ fi
 
 # Build as normal, with our extra version set to a timestamp
 make ${kernel_config}
+#make menuconfig
 make -j`getconf _NPROCESSORS_ONLN` EXTRAVERSION=-$(date +%Y%m%d-%H%M%S) bindeb-pkg dtbs
 
 # Save our config

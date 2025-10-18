@@ -34,7 +34,7 @@ atf_filename="arm-trusted-firmware-d5c68fd928586f4152a3402dfdd9a6ae6e39e392.tar.
 atf_platform="rk3588"
 
 # TPL for U-Boot (Stupid RK3588 BS)
-tpl_src="https://github.com/rockchip-linux/rkbin/raw/7c35e21a8529b3758d1f051d1a5dc62aae934b2b/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
+tpl_src="https://github.com/rockchip-linux/rkbin/raw/69bc9afdef1a15e06c1bd4238fc109bca3b3479a/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.19.bin"
 tpl_filename="rk3588_tpl.bin"
 
 # U-Boot
@@ -43,7 +43,7 @@ uboot_filename="u-boot-2025.07.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/6fa8dc5d46572f6a1a6ebca807fbfa5688a475e4/linux-6fa8dc5d46572f6a1a6ebca807fbfa5688a475e4.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/e920af0b1bde9eae93f6f03c765c2ee2725d7e6a/linux-e920af0b1bde9eae93f6f03c765c2ee2725d7e6a.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"
