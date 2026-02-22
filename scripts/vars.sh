@@ -22,8 +22,8 @@ toolchain32_bin_path="${toolchain32_filename%.tar.xz}/bin"
 toolchain32_cross_compile="arm-none-linux-gnueabihf-"
 
 # OP-TEE OS
-optee_src="https://github.com/OP-TEE/optee_os/archive/6dfa501fae923f444358fa337febf16932fc63a1.zip"
-optee_filename="optee_os-6dfa501fae923f444358fa337febf16932fc63a1.zip"
+optee_src="https://github.com/OP-TEE/optee_os/archive/33919ffbd54a7cea68cba484b442f39017cd864c.zip"
+optee_filename="optee_os-33919ffbd54a7cea68cba484b442f39017cd864c.zip"
 optee_overlay_dir="optee"
 
 # Arm Trusted Firmware
@@ -43,7 +43,7 @@ uboot_filename="u-boot-2025.07.zip"
 uboot_overlay_dir="u-boot"
 
 # Mainline Kernel
-kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/e920af0b1bde9eae93f6f03c765c2ee2725d7e6a/linux-e920af0b1bde9eae93f6f03c765c2ee2725d7e6a.tar.gz"
+kernel_src="https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/archive/cf25e6b01d57ee47f68fe07bac8a5778db074483/linux-cf25e6b01d57ee47f68fe07bac8a5778db074483.tar.gz"
 kernel_filename="$(basename ${kernel_src})"
 kernel_config="rk3588_defconfig"
 kernel_overlay_dir="kernel"

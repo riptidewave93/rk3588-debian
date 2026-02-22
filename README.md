@@ -4,10 +4,10 @@ Build script to build a Debian 12 image for select RK3588(s) based boards, as we
 
 Due to the age of the RK3588(s) SoC, this repo is unable to be 100% upstream at this time. However, staging branches/PRs for upstream work are targeted to give the best experience for the time being. Expect features to be missing as the SoC is brought up to mainline support standards. **Note that this repo is experimental!**
 
-- Linux Kernel - [Collabora's rockchip-devel branch at commit e920af0b](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/e920af0b1bde9eae93f6f03c765c2ee2725d7e6a)
+- Linux Kernel - [Collabora's rockchip-devel branch at commit cf25e6b0](https://gitlab.collabora.com/hardware-enablement/rockchip-3588/linux/-/tree/cf25e6b01d57ee47f68fe07bac8a5778db074483)
 - Arm Trusted Firmware - [worproject/arm-trusted-firmware at commit d5c68fd](https://github.com/worproject/arm-trusted-firmware/tree/d5c68fd928586f4152a3402dfdd9a6ae6e39e392)
 - U-Boot - [at commit v2025.07](https://github.com/u-boot/u-boot/tree/v2025.07)
-- OP-TEE OS - [at commit 6dfa501](https://github.com/OP-TEE/optee_os/tree/6dfa501fae923f444358fa337febf16932fc63a1)
+- OP-TEE OS - [at commit 33919ff](https://github.com/OP-TEE/optee_os/tree/33919ffbd54a7cea68cba484b442f39017cd864c)
 
 Note that there are patches/modifications applied to the kernel and u-boot. The changes made can be seen in the `./patches` and `./overlay` directories. Also, a `./downloads` directory is generated to store a copy of the toolchain during the first build.
 
