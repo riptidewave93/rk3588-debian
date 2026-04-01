@@ -6,10 +6,6 @@ scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 . ${scripts_path}/vars.sh
 
 # Exports
-export PATH=${build_path}/toolchain/${toolchain_bin_path}:${PATH}
-export GCC_COLORS=auto
-export CROSS_COMPILE=${toolchain_cross_compile}
-export ARCH=arm64
 export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
 
@@ -30,9 +26,7 @@ mount -t vfat ${disk_loop_dev}p2 ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs
-debootstrap --no-check-gpg --foreign --arch=${deb_arch} ${deb_args} ${deb_release} ${build_path}/rootfs ${deb_mirror}
-cp /usr/bin/qemu-aarch64-static usr/bin/
-chroot ${build_path}/rootfs /debootstrap/debootstrap --second-stage
+debootstrap --no-check-gpg --arch=${deb_arch} ${deb_args} ${deb_release} ${build_path}/rootfs ${deb_mirror}
 
 # Apply our apt mirror settings
 if [ "${distrib_name}" == "debian" ]; then
@@ -92,7 +86,6 @@ umount ${build_path}/rootfs/dev
 cd ${build_path}
 
 # Final cleanup
-rm ${build_path}/rootfs/usr/bin/qemu-aarch64-static
 umount ${build_path}/rootfs/boot/efi
 umount ${build_path}/rootfs
 losetup -d ${disk_loop_dev}

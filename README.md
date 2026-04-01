@@ -22,9 +22,9 @@ Currently images for the following devices are generated:
 
 - The following packages below are required to use this build script. Note that this repo uses a Dockerfile to handle most of the heavy lifting, but some system requirements still exist.
 
-`docker-ce losetup wget sudo make qemu-user-static`
+`docker-ce losetup curl sudo make` (Linux)
 
-Note that without qemu-user-static, debootstrap will fail!
+`docker curl make` (macOS via OrbStack or Docker Desktop)
 
 ## Usage
 

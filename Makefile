@@ -1,9 +1,11 @@
 .DEFAULT_GOAL := build
 CONTAINER_NAME = rk3588-builder:builder
+CONTAINER_NAME_ARM64 = rk3588-builder:builder-arm64
 
 setup:
-	sudo modprobe loop; \
-	sudo modprobe binfmt_misc
+	@if [ "$$(uname -s)" = "Linux" ]; then \
+		sudo modprobe loop; \
+	fi
 
 build: setup
 	@set -e;	\
@@ -22,13 +24,17 @@ bootloader: setup
 
 clean: mountclean
 	sudo rm -rf $(CURDIR)/BuildEnv; \
-	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME) | awk '{print $$1 }' | xargs -I {} docker rm {};
+	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME) | awk '{print $$1 }' | xargs -I {} docker rm {}; \
+	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME_ARM64) | awk '{print $$1 }' | xargs -I {} docker rm {} 2>/dev/null || true;
 
 distclean: clean
-	docker rmi $(CONTAINER_NAME) -f; \
+	docker rmi $(CONTAINER_NAME) -f 2>/dev/null || true; \
+	docker rmi $(CONTAINER_NAME_ARM64) -f 2>/dev/null || true; \
 	rm -rf $(CURDIR)/downloads $(CURDIR)/output
 
 mountclean:
-	sudo umount $(CURDIR)/BuildEnv/rootfs/boot/efi; \
-	sudo umount $(CURDIR)/BuildEnv/rootfs; \
-	sudo losetup -D
+	@if [ "$$(uname -s)" = "Linux" ]; then \
+		sudo umount $(CURDIR)/BuildEnv/rootfs/boot/efi 2>/dev/null || true; \
+		sudo umount $(CURDIR)/BuildEnv/rootfs 2>/dev/null || true; \
+		sudo losetup -D; \
+	fi
