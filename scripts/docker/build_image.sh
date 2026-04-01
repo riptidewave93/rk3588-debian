@@ -31,12 +31,12 @@ parted ${build_path}/bootloader.img --script mktable gpt \
     set 2 boot on \
     set 2 esp on
 
-# We will format the EFI for the bootloader.img here, since we can only do one
-# loopback mount once per docker container before it explodes in sadness.
-# Use kpartx instead of losetup -P for macOS Docker VM compatibility
-disk_loop_dev=$(losetup -f --show ${build_path}/bootloader.img)
-kpartx -av ${disk_loop_dev}
-loop_name=$(basename ${disk_loop_dev})
-mkfs.fat -n EFI /dev/mapper/${loop_name}p2
-kpartx -dv ${disk_loop_dev}
-losetup -d ${disk_loop_dev}
+# Format the EFI partition for bootloader.img without loop devices.
+# mkfs.fat works directly on regular files - create a temp file for the
+# partition, format it, then dd it into the correct offset in the image.
+efi_offset_kb=16384
+efi_size_kb=$(( (32 * 1024) - efi_offset_kb ))
+truncate -s ${efi_size_kb}K ${build_path}/bootloader_efi.tmp
+mkfs.fat -n EFI ${build_path}/bootloader_efi.tmp
+dd if=${build_path}/bootloader_efi.tmp of=${build_path}/bootloader.img bs=1K seek=${efi_offset_kb} conv=notrunc
+rm ${build_path}/bootloader_efi.tmp

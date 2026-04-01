@@ -53,7 +53,7 @@ if [ "$(uname -s)" = "Linux" ]; then
 fi
 
 debug_msg "Docker: Generating Disk Images..."
-docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_image.sh
+docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_image.sh
 
 # Only debootstrap on full build - always runs as arm64
 if [ -z "${BOOTLOADER_ONLY}" ]; then

@@ -63,7 +63,8 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - `modprobe loop` only runs on Linux; `modprobe binfmt_misc` removed entirely
 - `losetup`, `mountpoint` safety checks are Linux-only; on macOS, Docker's VM handles loop devices
 - All `docker run` commands use `-i ${docker_tty}` instead of `-it` for OrbStack compatibility
-- Loop partition devices use `kpartx` + `/dev/mapper/` instead of `losetup -P` + `/dev/loopXpN` (macOS Docker VMs don't auto-create partition nodes)
+- `build_image.sh` avoids loop devices entirely — formats EFI partition via temp file + dd (cross-platform, no privileged container needed)
+- `run_debootstrap.sh` uses `kpartx` + `/dev/mapper/` instead of `losetup -P` + `/dev/loopXpN` (macOS Docker VMs don't auto-create partition nodes)
 - `:Z` SELinux flags kept on Docker volume mounts (needed on Linux SELinux systems, silently ignored on macOS)
 - `sudo` usage in Makefile and host scripts is Linux-only guarded
 
