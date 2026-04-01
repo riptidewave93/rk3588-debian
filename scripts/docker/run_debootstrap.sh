@@ -10,19 +10,22 @@ export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
 
 # Mount our loopback for the image
-disk_loop_dev=$(losetup -f -P --show ${build_path}/disk.img)
+# Use kpartx instead of losetup -P for macOS Docker VM compatibility
+disk_loop_dev=$(losetup -f --show ${build_path}/disk.img)
+kpartx -av ${disk_loop_dev}
+loop_name=$(basename ${disk_loop_dev})
 
 # note that p1 is reserved for u-boot
 
 # Now format our partitions since were mounted as a loop device
-mkfs.fat -F 32 -n EFI ${disk_loop_dev}p2
-mkfs.ext4 -L ${distrib_name} ${disk_loop_dev}p3
+mkfs.fat -F 32 -n EFI /dev/mapper/${loop_name}p2
+mkfs.ext4 -L ${distrib_name} /dev/mapper/${loop_name}p3
 
 # Setup mounts!
 mkdir -p ${build_path}/rootfs
-mount -t ext4 ${disk_loop_dev}p3 ${build_path}/rootfs
+mount -t ext4 /dev/mapper/${loop_name}p3 ${build_path}/rootfs
 mkdir -p ${build_path}/rootfs/boot/efi
-mount -t vfat ${disk_loop_dev}p2 ${build_path}/rootfs/boot/efi
+mount -t vfat /dev/mapper/${loop_name}p2 ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs
@@ -88,5 +91,6 @@ cd ${build_path}
 # Final cleanup
 umount ${build_path}/rootfs/boot/efi
 umount ${build_path}/rootfs
+kpartx -dv ${disk_loop_dev}
 losetup -d ${disk_loop_dev}
 rm -rf ${build_path}/rootfs

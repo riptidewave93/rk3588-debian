@@ -33,6 +33,10 @@ parted ${build_path}/bootloader.img --script mktable gpt \
 
 # We will format the EFI for the bootloader.img here, since we can only do one
 # loopback mount once per docker container before it explodes in sadness.
-disk_loop_dev=$(losetup -f -P --show ${build_path}/bootloader.img)
-mkfs.fat -n EFI ${disk_loop_dev}p2
+# Use kpartx instead of losetup -P for macOS Docker VM compatibility
+disk_loop_dev=$(losetup -f --show ${build_path}/bootloader.img)
+kpartx -av ${disk_loop_dev}
+loop_name=$(basename ${disk_loop_dev})
+mkfs.fat -n EFI /dev/mapper/${loop_name}p2
+kpartx -dv ${disk_loop_dev}
 losetup -d ${disk_loop_dev}
