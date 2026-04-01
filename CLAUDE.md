@@ -64,6 +64,8 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - `losetup`, `mountpoint` safety checks are Linux-only; on macOS, Docker's VM handles loop devices
 - All `docker run` commands use `-i ${docker_tty}` instead of `-it` for OrbStack compatibility
 - Loop partition devices use `kpartx` + `/dev/mapper/` instead of `losetup -P` + `/dev/loopXpN` (macOS Docker VMs don't auto-create partition nodes)
+- No `:Z` SELinux flags on Docker volume mounts (unnecessary on macOS, removed for clarity)
+- `sudo` usage in Makefile and host scripts is Linux-only guarded
 
 ## OrbStack Compatibility (macOS)
 - OrbStack v1.8.0+ fixed loopback devices in privileged containers

@@ -21,22 +21,22 @@ fi
 
 if [ ! -f ${build_path}/optee/tee.bin ]; then
     debug_msg "Docker: Building OP-TEE..."
-    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_optee.sh
+    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_optee.sh
 fi
 
 if [ ! -f ${build_path}/atf/bl31.bin ]; then
     debug_msg "Docker: Building ATF..."
-    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_atf.sh
+    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_atf.sh
 fi
 
 if [ ! -d ${build_path}/uboot ]; then
     debug_msg "Docker: Building U-Boot..."
-    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_uboot.sh
+    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_uboot.sh
 fi
 
 if [ ! -d ${build_path}/kernel ]; then
     debug_msg "Docker: Building Kernel..."
-    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_kernel.sh
+    docker run --ulimit nofile=1024 --rm -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_kernel.sh
 fi
 
 # Safety checks only apply on Linux where loop mounts are on the host
@@ -53,15 +53,15 @@ if [ "$(uname -s)" = "Linux" ]; then
 fi
 
 debug_msg "Docker: Generating Disk Images..."
-docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_image.sh
+docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev" -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag} /repo/scripts/docker/build_image.sh
 
 # Only debootstrap on full build - always runs as arm64
 if [ -z "${BOOTLOADER_ONLY}" ]; then
     debug_msg "Docker: debootstraping..."
     if [ "${host_arch}" == "x86_64" ]; then
-        docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL --platform linux/arm64 -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag_arm64} /repo/scripts/docker/run_debootstrap.sh
+        docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL --platform linux/arm64 -v "/dev:/dev" -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag_arm64} /repo/scripts/docker/run_debootstrap.sh
     else
-        docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev:Z" -v "${root_path}:/repo:Z" -i ${docker_tty} ${docker_tag_arm64} /repo/scripts/docker/run_debootstrap.sh
+        docker run --ulimit nofile=1024 --rm --privileged --cap-add=ALL -v "/dev:/dev" -v "${root_path}:/repo" -i ${docker_tty} ${docker_tag_arm64} /repo/scripts/docker/run_debootstrap.sh
     fi
 fi
 

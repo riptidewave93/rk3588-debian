@@ -23,8 +23,12 @@ bootloader: setup
 	done					\
 
 clean: mountclean
-	sudo rm -rf $(CURDIR)/BuildEnv; \
-	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME) | awk '{print $$1 }' | xargs -I {} docker rm {}; \
+	@if [ "$$(uname -s)" = "Linux" ]; then \
+		sudo rm -rf $(CURDIR)/BuildEnv; \
+	else \
+		rm -rf $(CURDIR)/BuildEnv; \
+	fi; \
+	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME) | awk '{print $$1 }' | xargs -I {} docker rm {} 2>/dev/null || true; \
 	docker ps -a | awk '{ print $$1,$$2 }' | grep $(CONTAINER_NAME_ARM64) | awk '{print $$1 }' | xargs -I {} docker rm {} 2>/dev/null || true;
 
 distclean: clean
