@@ -9,23 +9,29 @@ scripts_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 export DEBIAN_FRONTEND=noninteractive
 export DEBCONF_NONINTERACTIVE_SEEN=true
 
-# Mount our loopback for the image
-# Use kpartx instead of losetup -P for macOS Docker VM compatibility
-disk_loop_dev=$(losetup -f --show ${build_path}/disk.img)
-kpartx -av ${disk_loop_dev}
-loop_name=$(basename ${disk_loop_dev})
+# Parse partition offsets and sizes from disk image (in 512-byte sectors)
+# Avoids kpartx/device-mapper which doesn't work in macOS Docker VMs
+p2_start=$(sfdisk -d ${build_path}/disk.img | grep "disk.img2" | sed 's/.*start= *\([0-9]*\).*/\1/')
+p2_size=$(sfdisk -d ${build_path}/disk.img | grep "disk.img2" | sed 's/.*size= *\([0-9]*\).*/\1/')
+p3_start=$(sfdisk -d ${build_path}/disk.img | grep "disk.img3" | sed 's/.*start= *\([0-9]*\).*/\1/')
+p3_size=$(sfdisk -d ${build_path}/disk.img | grep "disk.img3" | sed 's/.*size= *\([0-9]*\).*/\1/')
+
+# Create separate loop devices per partition using offset/sizelimit
+# This uses plain /dev/loopN devices (no device-mapper needed)
+efi_loop=$(losetup --offset $((p2_start * 512)) --sizelimit $((p2_size * 512)) -f --show ${build_path}/disk.img)
+root_loop=$(losetup --offset $((p3_start * 512)) --sizelimit $((p3_size * 512)) -f --show ${build_path}/disk.img)
 
 # note that p1 is reserved for u-boot
 
-# Now format our partitions since were mounted as a loop device
-mkfs.fat -F 32 -n EFI /dev/mapper/${loop_name}p2
-mkfs.ext4 -L ${distrib_name} /dev/mapper/${loop_name}p3
+# Now format our partitions
+mkfs.fat -F 32 -n EFI ${efi_loop}
+mkfs.ext4 -L ${distrib_name} ${root_loop}
 
 # Setup mounts!
 mkdir -p ${build_path}/rootfs
-mount -t ext4 /dev/mapper/${loop_name}p3 ${build_path}/rootfs
+mount -t ext4 ${root_loop} ${build_path}/rootfs
 mkdir -p ${build_path}/rootfs/boot/efi
-mount -t vfat /dev/mapper/${loop_name}p2 ${build_path}/rootfs/boot/efi
+mount -t vfat ${efi_loop} ${build_path}/rootfs/boot/efi
 
 # CD into our rootfs mount, and starts the fun!
 cd ${build_path}/rootfs
@@ -91,6 +97,6 @@ cd ${build_path}
 # Final cleanup
 umount ${build_path}/rootfs/boot/efi
 umount ${build_path}/rootfs
-kpartx -dv ${disk_loop_dev}
-losetup -d ${disk_loop_dev}
+losetup -d ${efi_loop}
+losetup -d ${root_loop}
 rm -rf ${build_path}/rootfs

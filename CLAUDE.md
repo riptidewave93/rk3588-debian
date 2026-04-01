@@ -64,7 +64,8 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - `losetup`, `mountpoint` safety checks are Linux-only; on macOS, Docker's VM handles loop devices
 - All `docker run` commands use `-i ${docker_tty}` instead of `-it` for OrbStack compatibility
 - `build_image.sh` avoids loop devices entirely — formats EFI partition via temp file + dd (cross-platform, no privileged container needed)
-- `run_debootstrap.sh` uses `kpartx` + `/dev/mapper/` instead of `losetup -P` + `/dev/loopXpN` (macOS Docker VMs don't auto-create partition nodes)
+- `run_debootstrap.sh` uses `losetup --offset --sizelimit` per partition instead of `losetup -P` or `kpartx` (avoids both partition device nodes and device-mapper, which don't work in macOS Docker VMs)
+- Partition offsets parsed from `sfdisk -d` output to create per-partition loop devices
 - `:Z` SELinux flags kept on Docker volume mounts (needed on Linux SELinux systems, silently ignored on macOS)
 - `sudo` usage in Makefile and host scripts is Linux-only guarded
 
