@@ -35,6 +35,11 @@ make ${kernel_config}
 #make menuconfig
 make -j`getconf _NPROCESSORS_ONLN` EXTRAVERSION=-$(date +%Y%m%d-%H%M%S) bindeb-pkg
 
+# Build DTBs for supported boards only (avoids broken upstream DTS in other vendors)
+for board in "${supported_devices[@]}"; do
+    make -j`getconf _NPROCESSORS_ONLN` rockchip/${board}.dtb
+done
+
 # Save our config
 mkdir -p ${build_path}/kernel
 make savedefconfig
@@ -45,3 +50,8 @@ rm ${kernel_builddir}/linux-image-*-dbg_*.deb
 
 # Move our debs to the kernel dir
 mv ${kernel_builddir}/linux-*.deb ${build_path}/kernel
+
+# Copy standalone DTBs for supported boards
+for board in "${supported_devices[@]}"; do
+    cp arch/arm64/boot/dts/rockchip/${board}.dtb ${build_path}/kernel/
+done

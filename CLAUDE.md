@@ -71,6 +71,11 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - OrbStack v2.0.3+ fixed `/dev` bind mounting broadly
 - The `-it` → `-i ${docker_tty}` change avoids the TTY + `/dev` interaction bug on older versions
 
+## Kernel Build Notes
+- `build_kernel.sh` runs `make bindeb-pkg` for debs, then builds DTBs per-board via `make rockchip/${board}.dtb`
+- Do NOT use `make dtbs` — it builds ALL arch/arm64 DTBs including broken upstream ones (e.g., Qualcomm sc7180-trogdor)
+- Standalone DTBs for each `supported_devices` entry are copied to `${build_path}/kernel/`
+
 ## Shell Scripting Conventions
 - All scripts source `vars.sh` for shared config
 - `debug_msg` and `error_msg` helper functions for colored output
