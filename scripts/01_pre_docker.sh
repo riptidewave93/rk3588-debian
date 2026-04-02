@@ -20,8 +20,12 @@ if [[ -n "${DISTRO}" ]]; then
 fi
 
 # Always build to pickup changes/updates/improvements
-debug_msg "Building ${docker_tag}"
+debug_msg "Building ${docker_tag} (native, for compilation)"
 docker build -t ${docker_tag} "${root_path}"
+if [ "${host_arch}" == "x86_64" ]; then
+    debug_msg "Building ${docker_tag_arm64} (arm64, for debootstrap)"
+    docker build --platform linux/arm64 -t ${docker_tag_arm64} "${root_path}"
+fi
 
 # Is our bootloader only flag set? if so mark it in build_path
 if [ -n "${BOOTLOADER_ONLY}" ]; then

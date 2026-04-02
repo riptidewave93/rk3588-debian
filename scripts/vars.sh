@@ -3,20 +3,48 @@
 root_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 build_path="${root_path}/BuildEnv"
 
-# Docker image name
+# Host OS detection
+case "$(uname -s)" in
+    Linux)  host_os="linux" ;;
+    Darwin) host_os="macos" ;;
+    *)      error_msg "Unsupported OS: $(uname -s)"; exit 1 ;;
+esac
+
+# Host architecture detection
+case "$(uname -m)" in
+    x86_64|amd64)   host_arch="x86_64" ;;
+    arm64|aarch64)   host_arch="aarch64" ;;
+    *)               error_msg "Unsupported architecture: $(uname -m)"; exit 1 ;;
+esac
+
+# Docker TTY flag - only use -t when a terminal is attached
+docker_tty=""
+if [ -t 0 ]; then
+    docker_tty="-t"
+fi
+
+
+# Docker image names
+# - docker_tag: native arch image for compilation (best performance)
+# - docker_tag_arm64: arm64 image for debootstrap (native on arm64, emulated on x86)
 docker_tag=rk3588-builder:builder
+if [ "${host_arch}" == "x86_64" ]; then
+    docker_tag_arm64=rk3588-builder:builder-arm64
+else
+    docker_tag_arm64=${docker_tag}
+fi
 
 # Supported Devices
 supported_devices=(rk3588-quartzpro64 rk3588s-rock-5a rk3588-rock-5b-plus)
 
-# 64bit Toolchain
-toolchain64_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
+# 64bit Toolchain (matched to host arch for native execution in compilation containers)
+toolchain64_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-${host_arch}-aarch64-none-linux-gnu.tar.xz"
 toolchain64_filename="$(basename ${toolchain64_url})"
 toolchain64_bin_path="${toolchain64_filename%.tar.xz}/bin"
 toolchain64_cross_compile="aarch64-none-linux-gnu-"
 
-# 32bit Toolchain
-toolchain32_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz"
+# 32bit Toolchain (matched to host arch for native execution in compilation containers)
+toolchain32_url="https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-${host_arch}-arm-none-linux-gnueabihf.tar.xz"
 toolchain32_filename="$(basename ${toolchain32_url})"
 toolchain32_bin_path="${toolchain32_filename%.tar.xz}/bin"
 toolchain32_cross_compile="arm-none-linux-gnueabihf-"

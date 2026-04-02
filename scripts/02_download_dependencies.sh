@@ -15,50 +15,50 @@ fi
 # 64bit Toolchain
 if [ ! -f ${root_path}/downloads/${toolchain64_filename} ]; then
     debug_msg "Downloading 64bit toolchain..."
-    wget ${toolchain64_url} -P ${root_path}/downloads
+    curl -L -o ${root_path}/downloads/${toolchain64_filename} ${toolchain64_url}
 fi
 
 # 32bit Toolchain
 if [ ! -f ${root_path}/downloads/${toolchain32_filename} ]; then
     debug_msg "Downloading 32bit toolchain..."
-    wget ${toolchain32_url} -P ${root_path}/downloads
+    curl -L -o ${root_path}/downloads/${toolchain32_filename} ${toolchain32_url}
 fi
 
 # OPTEE
 if [ ! -f ${root_path}/downloads/${optee_filename} ]; then
     debug_msg "Downloading OP-TEE OS..."
-    wget ${optee_src} -O ${root_path}/downloads/${optee_filename}
+    curl -L -o ${root_path}/downloads/${optee_filename} ${optee_src}
 fi
 
 # ATF
 if [ -z "${atf_binary}" ]; then
     if [ ! -f ${root_path}/downloads/${atf_filename} ]; then
         debug_msg "Downloading Arm Trusted Firmware..."
-        wget ${atf_src} -O ${root_path}/downloads/${atf_filename}
+        curl -L -o ${root_path}/downloads/${atf_filename} ${atf_src}
     fi
 else
     if [ ! -f ${root_path}/downloads/bl31.bin ]; then
         debug_msg "Downloading Prebuilt Arm Trusted Firmware..."
-        wget ${atf_binary} -O ${root_path}/downloads/bl31.bin
+        curl -L -o ${root_path}/downloads/bl31.bin ${atf_binary}
     fi
 fi
 
 # Stupid U-Boot TPL BS for this SoC
 if [ ! -f ${root_path}/downloads/${tpl_filename} ]; then
     debug_msg "Downloading Rockchip TPL (HWInit for U-Boot)..."
-    wget ${tpl_src} -O ${root_path}/downloads/${tpl_filename}
+    curl -L -o ${root_path}/downloads/${tpl_filename} ${tpl_src}
 fi
 
 # U-Boot
 if [ ! -f ${root_path}/downloads/${uboot_filename} ]; then
     debug_msg "Downloading U-Boot..."
-    wget ${uboot_src} -O ${root_path}/downloads/${uboot_filename}
+    curl -L -o ${root_path}/downloads/${uboot_filename} ${uboot_src}
 fi
 
 # Kernel
 if [ ! -f ${root_path}/downloads/${kernel_filename} ]; then
     debug_msg "Downloading Kernel..."
-    wget ${kernel_src} -O ${root_path}/downloads/${kernel_filename}
+    curl -L -o ${root_path}/downloads/${kernel_filename} ${kernel_src}
 fi
 
 debug_msg "Finished 02_download_dependencies.sh"

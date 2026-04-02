@@ -23,7 +23,7 @@ for board in "${supported_devices[@]}"; do
     # Is this a full build? Do the full debian image as well then.
     if [ -z "${BOOTLOADER_ONLY}" ]; then
         # Copy, install, and compress the disk image
-        cp ${build_path}/disk.img ${build_path}/final/${distrib_name}-${deb_release}-${board}.img
+        cp --sparse=never ${build_path}/disk.img ${build_path}/final/${distrib_name}-${deb_release}-${board}.img
         dd if=${build_path}/uboot/${board}.uboot of=${build_path}/final/${distrib_name}-${deb_release}-${board}.img bs=32k seek=1 conv=notrunc
         xz -T0 -v ${build_path}/final/${distrib_name}-${deb_release}-${board}.img
     fi
