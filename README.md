@@ -72,7 +72,6 @@ Note that if you want to manually flash the .uboot image to update an existing i
 
 ## To Do
 * All Boards
-  * HDM1 does not work
   * NPU does not work
 * Board Specific
   * QuartzPro64

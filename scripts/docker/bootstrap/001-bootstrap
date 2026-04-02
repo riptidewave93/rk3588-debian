@@ -56,6 +56,7 @@ rm -f /root/.root_uuid
 echo "GRUB_DISABLE_OS_PROBER=true" >> /etc/default/grub
 echo "GRUB_DEVICE=UUID=${ROOT_UUID}" >> /etc/default/grub
 echo "GRUB_DEVICE_UUID=${ROOT_UUID}" >> /etc/default/grub
+
 # Bypass grub probe with a stub that returns correct values
 mv /usr/sbin/grub-probe /usr/sbin/grub-probe.real
 cat > /usr/sbin/grub-probe << PROBE_EOF
@@ -73,6 +74,7 @@ done
 exit 0
 PROBE_EOF
 chmod +x /usr/sbin/grub-probe
+
 # Do the install
 if [ "${ID}" == "debian" ]; then
     grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=${ID} --recheck --no-nvram --removable
@@ -81,6 +83,7 @@ elif [ "${ID}" == "ubuntu" ]; then
     grub-install --target=arm64-efi --efi-directory=/boot/efi --bootloader-id=${ID} --recheck --no-nvram
     update-grub
 fi
+
 # Restore original grub-probe
 mv /usr/sbin/grub-probe.real /usr/sbin/grub-probe
 
