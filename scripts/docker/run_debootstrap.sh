@@ -76,7 +76,11 @@ console-common	console-data/keymap/full	select	us
 # Copy over kernel goodies
 cp -r ${build_path}/kernel ${build_path}/rootfs/root/
 
-# Do mounts for grub
+# Save root UUID for grub.cfg generation inside chroot
+# (grub-probe can't resolve loop device backing files in Docker, so we skip update-grub)
+findmnt -no uuid ${build_path}/rootfs > ${build_path}/rootfs/root/.root_uuid
+
+# Do mounts for chroot
 mount --bind /dev ${build_path}/rootfs/dev
 mount --bind /sys ${build_path}/rootfs/sys
 mount --bind /proc ${build_path}/rootfs/proc
@@ -86,7 +90,7 @@ cp ${docker_scripts_path}/bootstrap/001-bootstrap ${build_path}/rootfs/bootstrap
 chroot ${build_path}/rootfs /bootstrap
 rm ${build_path}/rootfs/bootstrap
 
-# Cleanup mounts for grub
+# Cleanup chroot mounts
 umount ${build_path}/rootfs/proc
 umount ${build_path}/rootfs/sys
 umount ${build_path}/rootfs/dev

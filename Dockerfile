@@ -18,6 +18,7 @@ RUN dpkg --add-architecture arm64 \
     debhelper \
     device-tree-compiler \
     dosfstools \
+    fdisk \
     dwarves \
     fakeroot \
     flex \

@@ -68,6 +68,7 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - Partition offsets parsed from `sfdisk -d` output to create per-partition loop devices
 - `:Z` SELinux flags kept on Docker volume mounts (needed on Linux SELinux systems, silently ignored on macOS)
 - `sudo` usage in Makefile and host scripts is Linux-only guarded
+- `cp --sparse=never` used for disk image copies in `run_package_final.sh` (macOS Docker VM filesystems don't support `fallocate` hole-punching, causing `error deallocating`)
 
 ## OrbStack Compatibility (macOS)
 - OrbStack v1.8.0+ fixed loopback devices in privileged containers
@@ -80,6 +81,17 @@ Build system for creating Debian 12 or Ubuntu 24.04 images for RK3588(s)-based A
 - `build_kernel.sh` runs `make bindeb-pkg` for debs, then builds DTBs per-board via `make rockchip/${board}.dtb`
 - Do NOT use `make dtbs` — it builds ALL arch/arm64 DTBs including broken upstream ones (e.g., Qualcomm sc7180-trogdor)
 - Standalone DTBs for each `supported_devices` entry are copied to `${build_path}/kernel/`
+
+## Docker Image Package Notes
+- `fdisk` package provides `sfdisk` (used in `run_debootstrap.sh` for partition offset parsing)
+- `dosfstools` provides `mkfs.fat`; `e2fsprogs` (included in base) provides `mkfs.ext4`
+- When formatting loop devices that may already contain a filesystem, use `-F` with `mkfs.ext4` to avoid interactive prompts
+
+## GRUB in Chroot
+- `grub-probe` (called by `update-grub`) traces loop devices back to their backing file
+- The backing file path varies by platform (Linux vs macOS Docker VMs) and doesn't exist inside the chroot
+- Fix: set `GRUB_DEVICE` and `GRUB_DEVICE_UUID` in `/etc/default/grub`, and temporarily replace `grub-probe` with a stub that returns correct `fs_uuid`, `fs`, `device`, and `hints_string` values so `update-grub` generates a valid `grub.cfg` with proper `search --fs-uuid` directives; restore the real `grub-probe` afterward
+- Root UUID is saved to `/root/.root_uuid` by `run_debootstrap.sh` before chroot, read inside `001-bootstrap`
 
 ## Shell Scripting Conventions
 - All scripts source `vars.sh` for shared config
